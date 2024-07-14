@@ -58,14 +58,11 @@ class _HealthRecordState extends State<HealthRecord> {
     return Form(
       key: formkey,
       child: Scaffold(
-        appBar: AppBar(
-
-
-          title: Padding(
-            padding: const EdgeInsets.only(left: 50),
-            child: Text("Health Record",
-                style: GoogleFonts.ubuntu(color: Color(0xFFC24A6B))),
-          ),
+        appBar: AppBar(backgroundColor: Colors.green.shade200,
+elevation: 4,shadowColor: Colors.grey,
+toolbarHeight: 100,
+          title: Text("Health Record",
+              style: GoogleFonts.poppins(fontWeight: FontWeight.w900)),
         ),
         body: SingleChildScrollView(
 
@@ -146,14 +143,17 @@ class _HealthRecordState extends State<HealthRecord> {
                     child: ElevatedButton(
                         onPressed: () {
                           if (formkey.currentState!.validate()) {
-                            HealthAdd();
+                            setState(() {
+                              HealthAdd();
+                            });
+
                           }
                         },
                         child: Text('Done',
                             style: GoogleFonts.inriaSerif(
                                 fontSize: 15, color: Colors.white)),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
+                          backgroundColor: Colors.green.shade900,
                         )))
               ],
             ),

@@ -1,452 +1,174 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'DAycarefoodview.dart';
 
 class FoodUpdate extends StatefulWidget {
-  const FoodUpdate({super.key, required this.id});
-final id;
+  final String id;
+
+  const FoodUpdate({Key? key, required this.id}) : super(key: key);
+
   @override
-  State<FoodUpdate> createState() => _FoodUpdateState();
+  _FoodUpdateState createState() => _FoodUpdateState();
 }
 
 class _FoodUpdateState extends State<FoodUpdate> {
+  TextEditingController mondayBreakfastController = TextEditingController();
+  TextEditingController mondayLunchController = TextEditingController();
+  TextEditingController mondaySnackController = TextEditingController();
 
-  final formkey = GlobalKey<FormState>();
-  var mbreakfast = TextEditingController();
-  var mlunch = TextEditingController();
-  var msnack = TextEditingController();
-  var tubreakfast = TextEditingController();
-  var tulunch = TextEditingController();
-  var tusnack = TextEditingController();
-  var wbreakfast = TextEditingController();
-  var wlunch = TextEditingController();
-  var wsnack = TextEditingController();
-  var thbreakfast = TextEditingController();
-  var thlunch = TextEditingController();
-  var thsnack = TextEditingController();
-  var fbreakfast = TextEditingController();
-  var flunch = TextEditingController();
-  var fsnack = TextEditingController();
+  TextEditingController tuesdayBreakfastController = TextEditingController();
+  TextEditingController tuesdayLunchController = TextEditingController();
+  TextEditingController tuesdaySnackController = TextEditingController();
 
-  final date = new DateTime.now();
+  TextEditingController wednesdayBreakfastController = TextEditingController();
+  TextEditingController wednesdayLunchController = TextEditingController();
+  TextEditingController wednesdaySnackController = TextEditingController();
 
-  Future<dynamic> Editfd() async {
-    await FirebaseFirestore.instance.collection("Daycarefoodadd").doc(widget.id).update({
-      "MBreakFast": mbreakfast.text,
-      "MLunch": mlunch.text,
-      "MSnack": msnack.text,
-      "TuBreakFast": tubreakfast.text,
-      "TuLunch": tulunch.text,
-      "TuSnack": tusnack.text,
-      "WBreakFast": wbreakfast.text,
-      "WLunch": wlunch.text,
-      "WSnack": wsnack.text,
-      "ThBreakFast": thbreakfast.text,
-      "ThLunch": thlunch.text,
-      "ThSnack": thsnack.text,
-      "FBreakFast": fbreakfast.text,
-      "FLunch": flunch.text,
-      "FSnack": fsnack.text,
+  TextEditingController thursdayBreakfastController = TextEditingController();
+  TextEditingController thursdayLunchController = TextEditingController();
+  TextEditingController thursdaySnackController = TextEditingController();
 
+  TextEditingController fridayBreakfastController = TextEditingController();
+  TextEditingController fridayLunchController = TextEditingController();
+  TextEditingController fridaySnackController = TextEditingController();
 
-      'date': DateFormat('dd/MM/yyyy').format(date)
-
-    });
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>DaycareFoodview()));
-    print("done");
-
-
+  @override
+  void initState() {
+    super.initState();
+    _fetchFoodDetails();
   }
+
+  void _fetchFoodDetails() async {
+    try {
+      DocumentSnapshot foodSnapshot = await FirebaseFirestore.instance
+          .collection("Daycarefoodadd")
+          .doc(widget.id)
+          .get();
+
+      Map<String, dynamic> data = foodSnapshot.data() as Map<String, dynamic>;
+
+      setState(() {
+        mondayBreakfastController.text = data['MBreakFast'] ?? '';
+        mondayLunchController.text = data['MLunch'] ?? '';
+        mondaySnackController.text = data['MSnack'] ?? '';
+
+        tuesdayBreakfastController.text = data['TuBreakFast'] ?? '';
+        tuesdayLunchController.text = data['TuLunch'] ?? '';
+        tuesdaySnackController.text = data['TuSnack'] ?? '';
+
+        wednesdayBreakfastController.text = data['WBreakFast'] ?? '';
+        wednesdayLunchController.text = data['WLunch'] ?? '';
+        wednesdaySnackController.text = data['WSnack'] ?? '';
+
+        thursdayBreakfastController.text = data['ThBreakFast'] ?? '';
+        thursdayLunchController.text = data['ThLunch'] ?? '';
+        thursdaySnackController.text = data['ThSnack'] ?? '';
+
+        fridayBreakfastController.text = data['FBreakFast'] ?? '';
+        fridayLunchController.text = data['FLunch'] ?? '';
+        fridaySnackController.text = data['FSnack'] ?? '';
+      });
+    } catch (e) {
+      print("Error fetching food details: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: formkey,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Color.fromRGBO(117, 10, 100, 1),
-          toolbarHeight: 122,
-          elevation: 6,
-          shadowColor: Colors.grey,
-          shape: ContinuousRectangleBorder(
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(80))),
-          title: Center(
-            child: Text(
-              "Food",
-              style: GoogleFonts.inriaSerif(
-                fontSize: 38,
-                color: Colors.white,
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 100,
+        elevation: 4,
+        shadowColor: Colors.grey,
+        title: Text('Edit Food Details'),
+        backgroundColor: Colors.green.shade200,
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: ListView(
+          children: [
+            _buildDayRow('Monday', mondayBreakfastController,
+                mondayLunchController, mondaySnackController),
+            _buildDayRow('Tuesday', tuesdayBreakfastController,
+                tuesdayLunchController, tuesdaySnackController),
+            _buildDayRow('Wednesday', wednesdayBreakfastController,
+                wednesdayLunchController, wednesdaySnackController),
+            _buildDayRow('Thursday', thursdayBreakfastController,
+                thursdayLunchController, thursdaySnackController),
+            _buildDayRow('Friday', fridayBreakfastController,
+                fridayLunchController, fridaySnackController),
+            SizedBox(height: 20),
+            ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade900,foregroundColor: Colors.white),
+              onPressed: () {
+                _updateFoodDetails(context);
+              },
+              child: Text('Update'),
             ),
-          ),
-
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Monday',
-                  style: GoogleFonts.inriaSerif(
-                    fontSize: 20,
-                  ),
-                ),
-                Material(
-                  elevation: 4,
-                  shadowColor: Colors.black45,
-                  child: TextFormField(
-                    controller: mbreakfast,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Empty breakfast !";
-                      }
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(borderSide: BorderSide.none),
-                        hintText: "BreakFast",
-                        labelStyle: GoogleFonts.inriaSerif(
-                            color: Colors.grey, fontSize: 20)),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .02,
-                ),
-                Material(
-                  elevation: 4,
-                  shadowColor: Colors.black45,
-                  child: TextFormField(
-                    controller: mlunch,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Empty Lunch !";
-                      }
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(borderSide: BorderSide.none),
-                        hintText: "Lunch",
-                        labelStyle: GoogleFonts.inriaSerif(
-                            color: Colors.grey, fontSize: 20)),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .02,
-                ),
-                Material(
-                  elevation: 4,
-                  shadowColor: Colors.black45,
-                  child: TextFormField(
-                    controller: msnack,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Empty Snack !";
-                      }
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(borderSide: BorderSide.none),
-                        hintText: "Snack",
-                        labelStyle: GoogleFonts.inriaSerif(
-                            color: Colors.grey, fontSize: 20)),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .02,
-                ),
-                Text(
-                  'Tuesday',
-                  style: GoogleFonts.inriaSerif(
-                    fontSize: 20,
-                  ),
-                ),
-                Material(
-                  elevation: 4,
-                  shadowColor: Colors.black45,
-                  child: TextFormField(
-                    controller: tubreakfast,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Empty Breakfast !";
-                      }
-                    },
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(borderSide: BorderSide.none),
-                      hintText: "BreakFast",
-                      labelStyle: GoogleFonts.inriaSerif(
-                          color: Colors.grey, fontSize: 20),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .02,
-                ),
-                Material(
-                  elevation: 4,
-                  shadowColor: Colors.black45,
-                  child: TextFormField(
-                    controller: tulunch,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Empty Lunch !";
-                      }
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(borderSide: BorderSide.none),
-                        hintText: "Lunch",
-                        labelStyle: GoogleFonts.inriaSerif(
-                            color: Colors.grey, fontSize: 20)),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .02,
-                ),
-                Material(
-                  elevation: 4,
-                  shadowColor: Colors.black45,
-                  child: TextFormField(
-                    controller: tusnack,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Empty Snack !";
-                      }
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(borderSide: BorderSide.none),
-                        hintText: "Snack",
-                        labelStyle: GoogleFonts.inriaSerif(
-                            color: Colors.grey, fontSize: 20)),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .02,
-                ),
-                Text(
-                  'Wednesday',
-                  style: GoogleFonts.inriaSerif(
-                    fontSize: 20,
-                  ),
-                ),
-                Material(
-                  elevation: 4,
-                  shadowColor: Colors.black45,
-                  child: TextFormField(
-                    controller: wbreakfast,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Empty Breakfast !";
-                      }
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(borderSide: BorderSide.none),
-                        hintText: "BreakFast",
-                        labelStyle: GoogleFonts.inriaSerif(
-                            color: Colors.grey, fontSize: 20)),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .02,
-                ),
-                Material(
-                  elevation: 4,
-                  shadowColor: Colors.black45,
-                  child: TextFormField(
-                    controller: wlunch,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Empty Lunch !";
-                      }
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(borderSide: BorderSide.none),
-                        hintText: "Lunch",
-                        labelStyle: GoogleFonts.inriaSerif(
-                            color: Colors.grey, fontSize: 20)),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .02,
-                ),
-                Material(
-                  elevation: 4,
-                  shadowColor: Colors.black45,
-                  child: TextFormField(
-                    controller: wsnack,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Empty Snack !";
-                      }
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(borderSide: BorderSide.none),
-                        hintText: "Snack",
-                        labelStyle: GoogleFonts.inriaSerif(
-                            color: Colors.grey, fontSize: 20)),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .02,
-                ),
-                Text(
-                  'Thursday',
-                  style: GoogleFonts.inriaSerif(
-                    fontSize: 20,
-                  ),
-                ),
-                Material(
-                  elevation: 4,
-                  shadowColor: Colors.black45,
-                  child: TextFormField(
-                    controller: thbreakfast,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Empty Breakfast !";
-                      }
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(borderSide: BorderSide.none),
-                        hintText: "BreakFast",
-                        labelStyle: GoogleFonts.inriaSerif(
-                            color: Colors.grey, fontSize: 20)),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .02,
-                ),
-                Material(
-                  elevation: 4,
-                  shadowColor: Colors.black45,
-                  child: TextFormField(
-                    controller: thlunch,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Empty Lunch !";
-                      }
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(borderSide: BorderSide.none),
-                        hintText: "Lunch",
-                        labelStyle: GoogleFonts.inriaSerif(
-                            color: Colors.grey, fontSize: 20)),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .02,
-                ),
-                Material(
-                  elevation: 4,
-                  shadowColor: Colors.black45,
-                  child: TextFormField(
-                    controller: thsnack,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Empty Snack !";
-                      }
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Snack",
-                      labelStyle: GoogleFonts.inriaSerif(
-                          color: Colors.grey, fontSize: 20),
-                      border: OutlineInputBorder(borderSide: BorderSide.none),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .02,
-                ),
-                Text(
-                  'Friday',
-                  style: GoogleFonts.inriaSerif(
-                    fontSize: 20,
-                  ),
-                ),
-                Material(
-                  elevation: 4,
-                  shadowColor: Colors.black45,
-                  child: TextFormField(
-                    controller: fbreakfast,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Empty Breakfast !";
-                      }
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(borderSide: BorderSide.none),
-                        hintText: "BreakFast",
-                        labelStyle: GoogleFonts.inriaSerif(
-                            color: Colors.grey, fontSize: 20)),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .02,
-                ),
-                Material(
-                  elevation: 4,
-                  shadowColor: Colors.black45,
-                  child: TextFormField(
-                    controller: flunch,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Empty Lunch !";
-                      }
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Lunch",
-                      labelStyle: GoogleFonts.inriaSerif(
-                          color: Colors.grey, fontSize: 20),
-                      border: OutlineInputBorder(borderSide: BorderSide.none),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .02,
-                ),
-                Material(
-                  elevation: 4,
-                  shadowColor: Colors.black45,
-                  child: TextFormField(
-                    controller: fsnack,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Empty Snack !";
-                      }
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Snack",
-                      labelStyle: GoogleFonts.inriaSerif(
-                          color: Colors.grey, fontSize: 20),
-                      border: OutlineInputBorder(borderSide: BorderSide.none),
-                    ),
-                  ),
-                ),
-
-                SizedBox(
-                  height: 20,
-                ),
-                Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if (formkey.currentState!.validate()) {
-
-                          Editfd();
-                        }
-                      },
-                      child: Text(
-                        'Update',
-                        style: GoogleFonts.inriaSerif(color: Colors.white),
-                      ),
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-                    )),
-                SizedBox(
-                  height: 30,
-                ),
-              ],
-            ),
-          ),
+          ],
         ),
       ),
     );
+  }
+
+  Widget _buildDayRow(
+      String day,
+      TextEditingController breakfastController,
+      TextEditingController lunchController,
+      TextEditingController snackController) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          day,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        TextFormField(
+          controller: breakfastController,
+          decoration: InputDecoration(labelText: 'Breakfast'),
+        ),
+        TextFormField(
+          controller: lunchController,
+          decoration: InputDecoration(labelText: 'Lunch'),
+        ),
+        TextFormField(
+          controller: snackController,
+          decoration: InputDecoration(labelText: 'Snack'),
+        ),
+        SizedBox(height: 20),
+      ],
+    );
+  }
+
+  void _updateFoodDetails(BuildContext context) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection("Daycarefoodadd")
+          .doc(widget.id)
+          .update({
+        'MBreakFast': mondayBreakfastController.text,
+        'MLunch': mondayLunchController.text,
+        'MSnack': mondaySnackController.text,
+
+        'TuBreakFast': tuesdayBreakfastController.text,
+        'TuLunch': tuesdayLunchController.text,
+        'TuSnack': tuesdaySnackController.text,
+
+        'WBreakFast': wednesdayBreakfastController.text,
+        'WLunch': wednesdayLunchController.text,
+        'WSnack': wednesdaySnackController.text,
+
+        'ThBreakFast': thursdayBreakfastController.text,
+        'ThLunch': thursdayLunchController.text,
+        'ThSnack': thursdaySnackController.text,
+
+        'FBreakFast': fridayBreakfastController.text,
+        'FLunch': fridayLunchController.text,
+        'FSnack': fridaySnackController.text,
+      });
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>DaycareFoodview()));
+    } catch (e) {
+      print("Error updating food details: $e");
+    }
   }
 }

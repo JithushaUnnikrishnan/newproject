@@ -23,6 +23,7 @@ class _AdTabbarState extends State<AdTabbar> {
       initialIndex: 0,
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
             elevation: 10,
             shadowColor: Colors.black,
             backgroundColor: Color(0xFF93B4D1),
@@ -30,7 +31,7 @@ class _AdTabbarState extends State<AdTabbar> {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>LogoPage()));},
+                IconButton(onPressed: (){Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LogoPage()));},
                   icon:
                    Icon(
                     Icons.logout_outlined,

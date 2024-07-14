@@ -15,7 +15,7 @@ class DaycareActivity extends StatefulWidget {
 
 class _DaycareActivityState extends State<DaycareActivity> {
   int _itemcount = 0;
-  var Daycarename;
+  var daycareID;
 
   void initState() {
     super.initState();
@@ -25,7 +25,7 @@ class _DaycareActivityState extends State<DaycareActivity> {
   Future<void> getData() async {
     SharedPreferences spref = await SharedPreferences.getInstance();
     setState(() {
-      Daycarename = spref.getString("name");
+      daycareID = spref.getString("id");
     });
     print("sharedPreference Data get");
   }
@@ -62,26 +62,23 @@ class _DaycareActivityState extends State<DaycareActivity> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromRGBO(117, 10, 100, 1),
-          toolbarHeight: 122,
+          backgroundColor: Colors.green.shade200,
+          toolbarHeight: 100,
           elevation: 6,
           shadowColor: Colors.grey,
           shape: ContinuousRectangleBorder(
               borderRadius: BorderRadius.only(bottomLeft: Radius.circular(80))),
-          title: Padding(
-            padding: const EdgeInsets.only(left: 65),
-            child: Text(
-              "Activity",
-              style: GoogleFonts.inriaSerif(
-                fontSize: 38,
-                color: Colors.white,
-              ),
+          title: Text(
+            "Activity",
+            style: GoogleFonts.poppins(
+              fontSize: 20,
+              fontWeight: FontWeight.w900
             ),
           ),
         ),
         body: StreamBuilder(
           stream:
-              FirebaseFirestore.instance.collection("DaycareActivity").where("Daycare Name",isEqualTo: Daycarename).snapshots(),
+              FirebaseFirestore.instance.collection("DaycareActivity").where("Daycare id",isEqualTo: daycareID).snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator(
@@ -145,7 +142,7 @@ class _DaycareActivityState extends State<DaycareActivity> {
             );
           },
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: FloatingActionButton(backgroundColor: Colors.green.shade200,
           onPressed: () {
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => EditCard()));
@@ -158,6 +155,12 @@ class _DaycareActivityState extends State<DaycareActivity> {
   }
 }
 
+
+
+
+
+
+
 class EditCard extends StatefulWidget {
   const EditCard({super.key});
 
@@ -166,7 +169,7 @@ class EditCard extends StatefulWidget {
 }
 
 class _EditCardState extends State<EditCard> {
-  var Daycarename;
+  var daycareID;
 
   void initState() {
     super.initState();
@@ -176,10 +179,11 @@ class _EditCardState extends State<EditCard> {
   Future<void> getData() async {
     SharedPreferences spref = await SharedPreferences.getInstance();
     setState(() {
-      Daycarename = spref.getString("name");
+      daycareID = spref.getString("id");
     });
     print("sharedPreference Data get");
   }
+
   final formkey = GlobalKey<FormState>();
   var activty = TextEditingController();
   String select = '';
@@ -192,7 +196,7 @@ class _EditCardState extends State<EditCard> {
       "Activity_name": activty.text,
       'Time': time.format(context),
       'date': DateFormat('dd/MM/yyyy').format(date),
-      "Daycare Name":Daycarename,
+      "Daycare id":daycareID,
     });
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => DaycareActivity()));
@@ -203,7 +207,12 @@ class _EditCardState extends State<EditCard> {
     return Form(
       key: formkey,
       child: Scaffold(
+
         appBar: AppBar(
+          toolbarHeight: 100,
+          backgroundColor: Colors.green.shade200,
+          elevation: 3,
+          shadowColor: Colors.grey,
           automaticallyImplyLeading: false,
           title: Row(
             children: [
@@ -219,7 +228,7 @@ class _EditCardState extends State<EditCard> {
                 width: 100,
               ),
               Text("Add activity",
-                  style: GoogleFonts.ubuntu(color: Color(0xFFC24A6B))),
+                  style: GoogleFonts.ubuntu()),
             ],
           ),
         ),
@@ -240,11 +249,21 @@ class _EditCardState extends State<EditCard> {
                 },
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  hintText: "Activity Name",
+                  labelText: "Activity Name",
                 ),
               ),
+              // SizedBox(height: 20,),
+              // Row(
+              //
+              //   children: [
+              //     Expanded(child: InputDecorator(decoration: InputDecoration(border: OutlineInputBorder(),labelText: "Date"))),
+              //     SizedBox(width: 16),
+              //     Expanded(child: InputDecorator(decoration: InputDecoration(border: OutlineInputBorder(),labelText: "Time"))),
+              //
+              //   ],
+              // ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * .51,
+                height: MediaQuery.of(context).size.height * .03,
               ),
               InkWell(
                   onTap: () {
@@ -259,7 +278,7 @@ class _EditCardState extends State<EditCard> {
                         width: 150,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Colors.green),
+                            color: Colors.green.shade900),
                         child: Center(
                           child: Text('Save',
                               style: GoogleFonts.ubuntu(

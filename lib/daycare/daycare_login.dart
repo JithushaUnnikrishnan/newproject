@@ -22,7 +22,7 @@ class _DaycareLoginState extends State<DaycareLogin> {
 
   void DayLog() async {
     final user = await FirebaseFirestore.instance
-        .collection('DaycareRegister')
+        .collection('DaycareRegister').where("status",isEqualTo: 1)
         .where('Email', isEqualTo: email.text)
         .where('Password', isEqualTo: password.text)
         .get();
@@ -34,7 +34,7 @@ class _DaycareLoginState extends State<DaycareLogin> {
       data.setString('id', id);
       data.setString("name", name); //green name data is stored
 
-      Navigator.push(context, MaterialPageRoute(
+      Navigator.pushReplacement(context, MaterialPageRoute(
         builder: (context) {
           return DayBottomButton();
         },
@@ -57,7 +57,7 @@ class _DaycareLoginState extends State<DaycareLogin> {
         body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF6DD5FA), Color(0xFF2980B9)],
+              colors: [Colors.green.shade100, Colors.green.shade400],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
@@ -88,7 +88,7 @@ class _DaycareLoginState extends State<DaycareLogin> {
                         style: GoogleFonts.poppins(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
-                          color: Colors.blue[900],
+                          color: Colors.green[900],
                         ),
                       ),
                       const SizedBox(height: 30),
@@ -102,7 +102,7 @@ class _DaycareLoginState extends State<DaycareLogin> {
                           return null;
                         },
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.email),
+                          prefixIcon: Icon(Icons.email,color: Colors.green,),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30),
                           ),
@@ -114,7 +114,7 @@ class _DaycareLoginState extends State<DaycareLogin> {
                       ),
                       const SizedBox(height: 20),
                       TextFormField(
-                        obscureText: true,
+                        obscureText: false,
                         controller: password,
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -123,7 +123,7 @@ class _DaycareLoginState extends State<DaycareLogin> {
                           return null;
                         },
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.lock),
+                          prefixIcon: Icon(Icons.lock,color: Colors.green),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30),
                           ),
@@ -157,10 +157,10 @@ class _DaycareLoginState extends State<DaycareLogin> {
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-                          backgroundColor: Colors.blue[900],
+                          backgroundColor: Colors.green[900],
                         ),
                         child: Text(
                           "Login",

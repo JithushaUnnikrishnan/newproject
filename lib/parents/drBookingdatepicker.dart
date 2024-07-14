@@ -51,6 +51,21 @@ class _ParentBookingDrState extends State<ParentBookingDr> {
   //   String formattedDate =
   //       '${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year}';
   // }
+  var ID;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  Future<void> getData() async {
+    SharedPreferences spref = await SharedPreferences.getInstance();
+    setState(() {
+      ID = spref.getString("id");
+    });
+    print("sharedPreference Data get");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -255,6 +270,7 @@ class _ParentBookingDrState extends State<ParentBookingDr> {
                                             "drname": Booking!["Username"],
                                             "Phone": Booking!["Phone"],
                                             "Doctor Id":widget.id,
+                                            "parent id":ID,
                                             "Status":0
                                           });
                                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Tabbar()));

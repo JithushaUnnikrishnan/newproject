@@ -17,7 +17,7 @@ class TeacherChildprofile extends StatefulWidget {
 }
 
 class _TeacherChildprofileState extends State<TeacherChildprofile> {
-  var Daycarename;
+  var ID;
  
 
   void initState() {
@@ -28,7 +28,7 @@ class _TeacherChildprofileState extends State<TeacherChildprofile> {
   Future<void> getData() async {
     SharedPreferences spref = await SharedPreferences.getInstance();
     setState(() {
-      Daycarename = spref.getString("Daycarename");
+      ID = spref.getString("Daycareid");
      
     });
     print("sharedPreference Data get");
@@ -38,6 +38,10 @@ class _TeacherChildprofileState extends State<TeacherChildprofile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+backgroundColor: Colors.green.shade200,
+        elevation: 4,
+        shadowColor: Colors.grey,
+        toolbarHeight: 100,
         automaticallyImplyLeading: false,
         leading: IconButton(
             onPressed: () {
@@ -45,14 +49,11 @@ class _TeacherChildprofileState extends State<TeacherChildprofile> {
                   MaterialPageRoute(builder: (context) => BottomButton()));
             },
             icon: Icon(Icons.arrow_back)),
-        title: Padding(
-          padding: const EdgeInsets.only(left: 70),
-          child: Text("My Children",
-              style: GoogleFonts.ubuntu(color: Color(0xFFC24A6B))),
-        ),
+        title: Text("My Children",
+            style: GoogleFonts.ubuntu()),
       ),
       body: FutureBuilder(
-        future: FirebaseFirestore.instance.collection("ParentRegister").where("Daycare name",isEqualTo:Daycarename ).get(),
+        future: FirebaseFirestore.instance.collection("ParentRegister").where("Daycare_id",isEqualTo:ID ).get(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator(
@@ -99,7 +100,7 @@ class _TeacherChildprofileState extends State<TeacherChildprofile> {
                       width: 80,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Colors.blue,
+                          color: Colors.green.shade700,
                           boxShadow: [
                             BoxShadow(
                                 offset: Offset(0, 3),

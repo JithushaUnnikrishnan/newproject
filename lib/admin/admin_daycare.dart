@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tiny/admin/certificateview.dart';
 
 class AdminDaycare extends StatefulWidget {
   const AdminDaycare({Key? key, required this.id}) : super(key: key);
@@ -31,8 +32,7 @@ class _AdminDaycareState extends State<AdminDaycare> {
     FirebaseFirestore.instance
         .collection("DaycareRegister")
         .doc(widget.id)
-        .update({"status": 1})
-        .then((value) {
+        .update({"status": 1}).then((value) {
       setState(() {
         _daycareFuture = getDaycareDetails(); // Refresh UI after update
       });
@@ -43,8 +43,7 @@ class _AdminDaycareState extends State<AdminDaycare> {
     FirebaseFirestore.instance
         .collection("DaycareRegister")
         .doc(widget.id)
-        .update({"status": 2})
-        .then((value) {
+        .update({"status": 2}).then((value) {
       setState(() {
         _daycareFuture = getDaycareDetails(); // Refresh UI after update
       });
@@ -127,7 +126,7 @@ class _AdminDaycareState extends State<AdminDaycare> {
                   child: Row(
                     children: [
                       Text(
-                        "Daycare Name:",
+                        "Daycare:",
                         style: GoogleFonts.poppins(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -185,50 +184,87 @@ class _AdminDaycareState extends State<AdminDaycare> {
                   ],
                 ),
                 SizedBox(height: 20),
-                Text(
-                  "CERTIFICATE",
-                  style: GoogleFonts.poppins(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blueAccent,
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Certificateadminview(
+                                  path: daycaview["certificate"],
+                                )));
+                  },
+                  child: Text(
+                    "CERTIFICATE",
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueAccent,
+                    ),
                   ),
                 ),
                 Spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      onPressed: acceptDaycare,
-                      style: ElevatedButton.styleFrom(
-                        padding:
-                        EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                        backgroundColor: Colors.green,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                      ),
-                      child: Text(
-                        "Accept",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: daycaview["status"] == 1 ? null : rejectDaycare,
-                      style: ElevatedButton.styleFrom(
-                        padding:
-                        EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                        backgroundColor: Colors.red,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                      ),
-                      child: Text(
-                        "Reject",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ),
-                    ),
-                  ],
-                ),
+                daycaview["status"] == 0
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: acceptDaycare,
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 15),
+                              backgroundColor: Colors.green,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            child: Text(
+                              "Accept",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed:
+                                daycaview["status"] == 1 ? null : rejectDaycare,
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 15),
+                              backgroundColor: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            child: Text(
+                              "Reject",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          ),
+                        ],
+                      )
+                    : daycaview["status"] == 1
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 30, vertical: 15),
+                                  backgroundColor: Colors.green,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                ),
+                                child: Text(
+                                  "Accepted",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 16),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Text("Rejected",style: TextStyle(color: Colors.red),),
                 SizedBox(height: 20),
               ],
             ),

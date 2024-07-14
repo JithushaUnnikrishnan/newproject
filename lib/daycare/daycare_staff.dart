@@ -17,22 +17,6 @@ class DaycareStaff extends StatefulWidget {
 }
 
 class _DaycareStaffState extends State<DaycareStaff> {
-  var name;
-
-  @override
-  void initState() {
-    super.initState();
-    getData();
-  }
-
-  Future<void> getData() async {
-    SharedPreferences spref = await SharedPreferences.getInstance();
-    setState(() {
-      name = spref.getString("name");
-    });
-    print("sharedPreference Data get");
-  }
-
   void showDeleteDialog(BuildContext context, String docId) {
     showDialog(
       context: context,
@@ -51,7 +35,7 @@ class _DaycareStaffState extends State<DaycareStaff> {
               child: Text("OK"),
               onPressed: () {
                 FirebaseFirestore.instance
-                    .collection("Daycare AddStaff")
+                    .collection("DaycareAddStaff")
                     .doc(docId)
                     .delete();
                 Navigator.of(context).pop();
@@ -63,12 +47,27 @@ class _DaycareStaffState extends State<DaycareStaff> {
     );
   }
 
+  var ID;
+
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  Future<void> getData() async {
+    SharedPreferences spref = await SharedPreferences.getInstance();
+    setState(() {
+      ID = spref.getString("id");
+    });
+    print("sharedPreference Data get");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Color.fromRGBO(117, 10, 100, 1),
+        backgroundColor: Colors.green.shade200,
         toolbarHeight: 122,
         elevation: 6,
         shadowColor: Colors.grey,
@@ -89,15 +88,16 @@ class _DaycareStaffState extends State<DaycareStaff> {
             ),
             Text(
               "My Staff",
-              style: GoogleFonts.inriaSerif(
-                fontSize: 38,
-                color: Colors.white,
+              style: GoogleFonts.poppins(
+                fontSize: 20,
+                fontWeight: FontWeight.w900,
               ),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green.shade200,
         onPressed: () {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => DaycareStafadd()));
@@ -106,8 +106,8 @@ class _DaycareStaffState extends State<DaycareStaff> {
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection("Daycare AddStaff")
-            .where("Daycare Name", isEqualTo: name)
+            .collection("DaycareAddStaff")
+            .where("DaycareId", isEqualTo: ID)
             .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -131,9 +131,11 @@ class _DaycareStaffState extends State<DaycareStaff> {
                   child: Card(
                     child: ListTile(
                       title: Text(
-                        Staff[index]["Staff Name"],
+                        Staff[index]["StaffName"],
                         style: GoogleFonts.inriaSerif(
-                            fontSize: 20, color: Colors.black),
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w900),
                       ),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,7 +170,10 @@ class _DaycareStaffState extends State<DaycareStaff> {
                             onPressed: () {
                               showDeleteDialog(context, Staff[index].id);
                             },
-                            icon: Icon(CupertinoIcons.delete),
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
                           ),
                         ],
                       ),

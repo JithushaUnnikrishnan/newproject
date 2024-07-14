@@ -60,7 +60,7 @@ class _DoctorHomeState extends State<DoctorHome> {
                     elevation: 5,
                     child: InkWell(
                       onTap: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => SelectCategoryreg()),
                         );

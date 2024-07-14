@@ -75,8 +75,8 @@ class _EnrollEditState extends State<EnrollEdit> {
       key: formkey,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromRGBO(66, 135, 156, 1),
-          toolbarHeight: 122,
+          backgroundColor: Colors.green.shade200,
+          toolbarHeight: 100,
           elevation: 10,
           shadowColor: Colors.black,
           shape: ContinuousRectangleBorder(
@@ -179,7 +179,7 @@ class _EnrollEditState extends State<EnrollEdit> {
                               color: Colors.grey,
                             ),
                           ],
-                          color: Colors.blue,
+                          color: Colors.green.shade900,
                         ),
                       ),
                     ),

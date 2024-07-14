@@ -82,19 +82,16 @@ class _DaycareFoodState extends State<DaycareFood> {
       key: formkey,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromRGBO(117, 10, 100, 1),
-          toolbarHeight: 122,
+          backgroundColor: Colors.green.shade200,
+          toolbarHeight: 100,
           elevation: 6,
           shadowColor: Colors.grey,
           shape: ContinuousRectangleBorder(
               borderRadius: BorderRadius.only(bottomLeft: Radius.circular(80))),
-          title: Center(
-            child: Text(
-              "Food",
-              style: GoogleFonts.inriaSerif(
-                fontSize: 38,
-                color: Colors.white,
-              ),
+          title: Text(
+            "Food",
+            style: GoogleFonts.poppins(
+              fontSize: 20,fontWeight: FontWeight.w900
             ),
           ),
         ),
@@ -107,7 +104,7 @@ class _DaycareFoodState extends State<DaycareFood> {
                 Text(
                   'Monday',
                   style: GoogleFonts.inriaSerif(
-                    fontSize: 20,
+                    fontSize: 20,fontWeight: FontWeight.w600
                   ),
                 ),
                 Material(
@@ -173,7 +170,7 @@ class _DaycareFoodState extends State<DaycareFood> {
                 Text(
                   'Tuesday',
                   style: GoogleFonts.inriaSerif(
-                    fontSize: 20,
+                    fontSize: 20, fontWeight: FontWeight.w600,
                   ),
                 ),
                 Material(
@@ -239,8 +236,8 @@ class _DaycareFoodState extends State<DaycareFood> {
                 ),
                 Text(
                   'Wednesday',
-                  style: GoogleFonts.inriaSerif(
-                    fontSize: 20,
+                  style: GoogleFonts.inriaSerif( fontSize: 20,fontWeight: FontWeight.w600,
+
                   ),
                 ),
                 Material(
@@ -305,8 +302,8 @@ class _DaycareFoodState extends State<DaycareFood> {
                 ),
                 Text(
                   'Thursday',
-                  style: GoogleFonts.inriaSerif(
-                    fontSize: 20,
+                  style: GoogleFonts.inriaSerif( fontSize: 20,fontWeight: FontWeight.w600,
+
                   ),
                 ),
                 Material(
@@ -372,8 +369,8 @@ class _DaycareFoodState extends State<DaycareFood> {
                 ),
                 Text(
                   'Friday',
-                  style: GoogleFonts.inriaSerif(
-                    fontSize: 20,
+                  style: GoogleFonts.inriaSerif( fontSize: 20,fontWeight: FontWeight.w600,
+
                   ),
                 ),
                 Material(
@@ -450,7 +447,7 @@ class _DaycareFoodState extends State<DaycareFood> {
                     'Done',
                     style: GoogleFonts.inriaSerif(color: Colors.white),
                   ),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade900),
                 )),
                 SizedBox(
                   height: 30,

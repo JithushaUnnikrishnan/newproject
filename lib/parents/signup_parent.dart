@@ -1,12 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:tiny/parents/parent%20choosing%20daycare.dart';
-import 'package:tiny/parents/parent_login.dart';
-import 'package:tiny/parents/searchdaycare.dart';
+
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 class ParentSignup extends StatefulWidget {
   const ParentSignup({super.key});
@@ -16,8 +16,7 @@ class ParentSignup extends StatefulWidget {
 }
 
 class _ParentSignupState extends State<ParentSignup> {
-  // List<String> locationlist = ["male", "female", "other"];
-  // String? selectedvalue;
+
   final formkey = GlobalKey<FormState>();
   var parentname = TextEditingController();
   var phone = TextEditingController();
@@ -27,30 +26,56 @@ class _ParentSignupState extends State<ParentSignup> {
   var Dateofbirth = TextEditingController();
   var ChildName = TextEditingController();
   var Address = TextEditingController();
+
   // String? Select;
   String Select = '';
   String dateselect = '';
   final date = new DateTime.now();
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (pickedDate != null) {
+      setState(() {
+        Dateofbirth.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+      });
+    }
+  }
 
-  Future<dynamic> ParentReg() async {
-    await FirebaseFirestore.instance.collection("ParentRegister").add({
-      "Parent Name": parentname.text,
-      "Phone": phone.text,
-      "Email": email.text,
-      "Password": password.text,
-      "Daycare name": Select,
-      "Child name": ChildName.text,
-      "Date of birth": Dateofbirth.text,
-      "Address": Address.text,
-      "gender": null,
-      ""
-          'date': DateFormat('dd/MM/yyyy').format(date),
-      "path":
-          "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=",
-    });
-    print('done');
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => ParentLogin()));
+// Define your regular expression for password validation
+  final RegExp passwordRegExp = RegExp(
+    r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$',
+  );
+
+  String? _validatePassword(BuildContext context, String? value) {
+    try {
+      if (value == null || value.isEmpty) {
+        return 'Password is required';
+      } else if (!passwordRegExp.hasMatch(value)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+
+
+
+                'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character'),
+          ),
+        );
+        return 'An error occurred while validating the password:';
+      }
+      return null;
+    } catch (e) {
+      // Display the error message using ScaffoldMessenger
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('An error occurred while validating the password: $e'),
+        ),
+      );
+      return 'An unexpected error occurred';
+    }
   }
 
   @override
@@ -143,13 +168,8 @@ class _ParentSignupState extends State<ParentSignup> {
               padding: const EdgeInsets.only(right: 40, left: 20),
               child: TextFormField(
                 keyboardType: TextInputType.emailAddress,
-                obscureText: true,
                 controller: password,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "Empty Password!";
-                  }
-                },
+                validator: (value) => _validatePassword(context, value),
                 decoration: InputDecoration(
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10)),
@@ -162,21 +182,26 @@ class _ParentSignupState extends State<ParentSignup> {
               height: MediaQuery.of(context).size.height * 0.05,
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 40, left: 20),
+              padding: const EdgeInsets.only(left: 20, right: 40),
               child: TextFormField(
-                controller: Dateofbirth,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return "Empty Date Of Birth!";
+                    return "Empty Date of birth!";
                   }
                 },
-                keyboardType: TextInputType.datetime,
+                controller: Dateofbirth,
                 decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    hintText: "Date Of Birth",
-                    labelStyle: GoogleFonts.inriaSerif(
-                        color: Colors.grey, fontSize: 20)),
+                  labelText: 'Date Of Birth',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  suffixIcon: Icon(Icons.calendar_today,color: Colors.green.shade900,),
+                  filled: true,
+                  fillColor: Colors.white.withOpacity(0.8),
+                ),
+                style: TextStyle(fontSize: 18.0),
+                readOnly: true,
+                onTap: () => _selectDate(context),
               ),
             ),
             SizedBox(
@@ -222,105 +247,7 @@ class _ParentSignupState extends State<ParentSignup> {
                         color: Colors.grey, fontSize: 20)),
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
-            ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: [
-            //     Padding(
-            //       padding: const EdgeInsets.only(right: 15),
-            //       child: Container(
-            //         width: 360,
-            //         height: 69,
-            //         decoration: BoxDecoration(
-            //             borderRadius: BorderRadius.circular(6),
-            //             color: Colors.transparent,
-            //             border: Border.all()),
-            //         child: DropdownButton<String>(
-            //             isExpanded: true,
-            //             elevation: 0,
-            //             // dropdownColor: Colors.grey.shade100,
-            //             hint: const Text("Gender"),
-            //             underline: const SizedBox(),
-            //             value: selectedvalue,
-            //             items: locationlist.map((String value) {
-            //               return DropdownMenuItem<String>(
-            //                   value: value, child: Text(value));
-            //             }).toList(),
-            //             onChanged: (newvalue) {
-            //               setState(() {
-            //                 selectedvalue = newvalue;
-            //                 print(selectedvalue);
-            //               });
-            //             },
-            //             padding: const EdgeInsets.symmetric(horizontal: 10)),
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
-            ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: [
-            //     StreamBuilder<QuerySnapshot>(
-            //       stream: FirebaseFirestore.instance
-            //           .collection('DaycareRegister')
-            //           .snapshots(),
-            //       builder: (context, snapshot) {
-            //         if (snapshot.connectionState == ConnectionState.waiting) {
-            //           return const SizedBox();
-            //         } else if (snapshot.hasError) {
-            //           return Text('Error: ${snapshot.error}');
-            //         } else {
-            //           List<String> tradeList = snapshot.data!.docs
-            //               .map((DocumentSnapshot document) =>
-            //               document['Username'].toString())
-            //               .toList();
-            //
-            //           return Container(
-            //             width: 350,
-            //             height: 60,
-            //             decoration: BoxDecoration(
-            //                 border: Border.all(color: Colors.black54),
-            //                 borderRadius: BorderRadius.circular(8)),
-            //             child: DropdownButton<String>(
-            //               padding: const EdgeInsets.symmetric(
-            //                   horizontal: 20, vertical: 3),
-            //               underline: const SizedBox(),
-            //               borderRadius: BorderRadius.circular(10),
-            //               hint: Padding(
-            //                 padding: const EdgeInsets.only(right: 110),
-            //                 child: const Text("choose your Daycare "),
-            //               ),
-            //               value: Select,
-            //               // Set initial value if needed
-            //               onChanged: (String? newValue) {
-            //                 setState(() {
-            //                   Select = newValue!;
-            //                   print(Select);
-            //                 });
-            //               },
-            //
-            //               items: tradeList
-            //                   .map<DropdownMenuItem<String>>(
-            //                       (String value) => DropdownMenuItem<String>(
-            //                     value: value,
-            //                     child: Text(value),
-            //                   ))
-            //                   .toList(),
-            //             ),
-            //           );
-            //         }
-            //       },
-            //     ),
-            //     const SizedBox(
-            //       width: 20,
-            //     )
-            //   ],
-            // ),
+
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.055,
             ),
@@ -356,7 +283,7 @@ class _ParentSignupState extends State<ParentSignup> {
                   height: 60,
                   child: Center(
                     child: Text(
-                      "Register",
+                      "Next",
                       style: GoogleFonts.inriaSerif(
                         height: 1,
                         color: Colors.white,
@@ -367,37 +294,11 @@ class _ParentSignupState extends State<ParentSignup> {
                   alignment: Alignment.topCenter,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Color.fromRGBO(
-                        14,
-                        97,
-                        116,
-                        0.99,
-                      )),
+                      color:Colors.green.shade900 ),
                 ),
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text("Already have an account?", style: TextStyle(fontSize: 15)),
-              InkWell(
-                  onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ParentLogin()));
-                  },
-                  child: Text(
-                    "Login",
-                    style: TextStyle(
-                        color: Color.fromRGBO(
-                          14,
-                          97,
-                          116,
-                          0.99,
-                        ),
-                        fontSize: 16),
-                  ))
-            ]),
+
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.05,
             ),

@@ -14,7 +14,7 @@ class DaycareChildren extends StatefulWidget {
 }
 
 class _DaycareChildrenState extends State<DaycareChildren> {
-  var name;
+  var ID;
 
   void initState() {
     super.initState();
@@ -24,10 +24,41 @@ class _DaycareChildrenState extends State<DaycareChildren> {
   Future<void> getData() async {
     SharedPreferences spref = await SharedPreferences.getInstance();
     setState(() {
-      name = spref.getString("name");
+      ID = spref.getString("id");
     });
     print("sharedPreference Data get");
   }
+
+  void showDeleteDialog(BuildContext context, String docId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Confirm Deletion"),
+          content: Text("Are you sure you want to delete this child?"),
+          actions: [
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("OK"),
+              onPressed: () {
+                FirebaseFirestore.instance
+                    .collection("ParentRegister")
+                    .doc(docId)
+                    .delete();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,27 +70,29 @@ class _DaycareChildrenState extends State<DaycareChildren> {
                     MaterialPageRoute(builder: (context) => DayBottomButton()));
               },
               icon: Icon(Icons.arrow_back)),
-          backgroundColor: Color.fromRGBO(117, 10, 100, 1),
-          toolbarHeight: 122,
+          backgroundColor: Colors.green.shade200,
+          toolbarHeight: 100,
           elevation: 6,
           shadowColor: Colors.grey,
           shape: ContinuousRectangleBorder(
               borderRadius: BorderRadius.only(bottomLeft: Radius.circular(80))),
-          title: Center(
-            child: Text(
-              " Children",
-              style: GoogleFonts.inriaSerif(
-                fontSize: 38,
-                color: Colors.white,
-              ),
+          title: Text(
+            " Children",
+            style: GoogleFonts.poppins(
+              fontSize: 20,fontWeight: FontWeight.w900,
+
             ),
           ),
         ),
         body: FutureBuilder(
-          future: FirebaseFirestore.instance.collection('ParentRegister').where("Daycare name",isEqualTo:name).get(),
-          builder: (context, AsyncSnapshot<QuerySnapshot>snapshot) {
+          future: FirebaseFirestore.instance
+              .collection('ParentRegister')
+              .where("Daycare_id", isEqualTo: ID)
+              .get(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator(
+              return Center(
+                  child: CircularProgressIndicator(
                 color: Color(0xFF750A64),
               ));
             }
@@ -71,64 +104,69 @@ class _DaycareChildrenState extends State<DaycareChildren> {
               itemCount: child.length,
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 5, vertical: 5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                   child: Card(
-
                     child: ListTile(
-                        leading: Text(child[index]['Child name'],
-                            style:
-                            GoogleFonts.inriaSerif(fontSize: 20,
-                            color: Colors.black)),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => DaycareChildview(id:child[index].id)));
-                          },
-                          child: Container(
-                              height: 35,
-                              width: 70,
+                      leading: Text(child[index]['Child name'],
+                          style: GoogleFonts.inriaSerif(
+                              fontSize: 20, color: Colors.black,fontWeight: FontWeight.w600)),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => DaycareChildview(
+                                          id: child[index].id)));
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 8,
+                                horizontal: 16,
+                              ),
                               decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                        offset: Offset(0, 2),
-                                        spreadRadius: 1,
-                                        blurRadius: 1,
-                                        color: Colors.black45)
-                                  ],
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.blue),
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "View",
-                                  style: GoogleFonts.inriaSerif(
-                                      fontSize: 15, color: Colors.white),
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.green,
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: Offset(0, 2),
+                                    spreadRadius: 1,
+                                    blurRadius: 1,
+                                    color: Colors.black45,
+                                  ),
+                                ],
+                              ),
+                              child: Text(
+                                "View",
+                                style: GoogleFonts.inriaSerif(
+                                  fontSize: 15,
+                                  color: Colors.white,
                                 ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                showDeleteDialog(context, child[index].id);
+                              },
+                              icon: Icon(
+                                CupertinoIcons.delete,
+                                color: Colors.red,
                               )),
-                        ),
-SizedBox(width: 15,),
-                        IconButton(onPressed: (){
-                          setState(() {
-                            FirebaseFirestore.instance.collection("ParentRegister").doc(child[index].id).delete();
-                          });
-                        }, icon: Icon(CupertinoIcons.delete)),
-
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),);
+                );
               },
-
             );
           },
-
-        )
-    );
+        ));
   }
 }

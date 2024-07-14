@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tiny/parents/drBookingdatepicker.dart';
 import 'package:tiny/parents/parent_bottombuton.dart';
 import 'package:tiny/parents/parent_home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tiny/parents/viewcerti.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ParentBooking extends StatefulWidget {
@@ -15,10 +17,25 @@ class ParentBooking extends StatefulWidget {
 }
 
 class _ParentBookingState extends State<ParentBooking> {
+  var daycreID;
+
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  Future<void> getData() async {
+    SharedPreferences spref = await SharedPreferences.getInstance();
+    setState(() {
+      daycreID = spref.getString("Daycare_id");
+    });
+    print("sharedPreference Data get");
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: FirebaseFirestore.instance.collection("DoctorReg").get(),
+      future: FirebaseFirestore.instance.collection("DoctorReg").where("Daycare_id",isEqualTo:daycreID ).get(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
@@ -71,23 +88,7 @@ class _ParentBookingState extends State<ParentBooking> {
                                   Doctor[index]["specialization"],
                                   style: GoogleFonts.inter(fontSize: 16),
                                 ),
-                                // Row(
-                                //   children: [
-                                //     Icon(
-                                //       Icons.star,
-                                //       color: Colors.yellow,
-                                //       size: 15,
-                                //     ),
-                                //     Icon(Icons.star,
-                                //         color: Colors.yellow, size: 15),
-                                //     Icon(Icons.star,
-                                //         color: Colors.yellow, size: 15),
-                                //     Icon(Icons.star,
-                                //         color: Colors.yellow, size: 15),
-                                //     Icon(Icons.star,
-                                //         color: Colors.yellow, size: 15),
-                                //   ],
-                                // ),
+
                                 Text(Doctor[index]["specialization"],
                                     style: GoogleFonts.inter(fontSize: 16)),
                                 Text(Doctor[index]["experience"],
@@ -98,6 +99,7 @@ class _ParentBookingState extends State<ParentBooking> {
                                     style: GoogleFonts.inter(fontSize: 16)),
                                 Text(Doctor[index]["Phone"],
                                     style: GoogleFonts.inter(fontSize: 16)),
+                                TextButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>Parent_certificate(id:Doctor[index].id)));}, child: Text("Certificate")),
                                 SizedBox(
                                     height: MediaQuery.of(context).size.height *
                                         .021),

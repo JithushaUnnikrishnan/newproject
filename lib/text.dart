@@ -1,38 +1,56 @@
 import 'package:flutter/material.dart';
 
-class Demotext extends StatefulWidget {
-  const Demotext({super.key});
-
+class RegisterPage extends StatefulWidget {
   @override
-  State<Demotext> createState() => _DemotextState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _DemotextState extends State<Demotext> {
+class _RegisterPageState extends State<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _passwordController = TextEditingController();
+
+  // Define the regex for password validation
+  final RegExp passwordRegExp = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Password is required';
+    } else if (!passwordRegExp.hasMatch(value)) {
+      return 'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('Jithushaunnikrishnan')),
-        backgroundColor: Colors.blue,
+        title: Text('Register'),
       ),
-      body: Container(
-        padding: const EdgeInsets.all(100),
-        color: const Color.fromARGB(255, 233, 228, 228),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text("data",selectionColor: Colors.amber,),
-            const SizedBox(height: 10,),
-            TextFormField(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              TextFormField(
+                controller: _passwordController,
+                decoration: InputDecoration(labelText: 'Password'),
+                obscureText: true,
+                validator: _validatePassword,
               ),
-            ),
-            const SizedBox(height: 10,),
-
-            ElevatedButton(onPressed:(){}, child: const Text("done",selectionColor: Colors.blueGrey))
-            
-          ],
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState?.validate() ?? false) {
+                    // Process data
+                    print('Form is valid');
+                  }
+                },
+                child: Text('Register'),
+              ),
+            ],
+          ),
         ),
       ),
     );

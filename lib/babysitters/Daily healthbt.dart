@@ -53,6 +53,9 @@ class _MychildrenHomeState extends State<MychildrenHome> {
         }
         return Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.green.shade200,
+            elevation: 4,
+            shadowColor: Colors.grey,
             automaticallyImplyLeading: false,
             leading: IconButton(
                 onPressed: () {
@@ -81,12 +84,12 @@ class _MychildrenHomeState extends State<MychildrenHome> {
                       child: ListTile(
                         title: Text(
                           childprofile!["Child name"],
-                          style: GoogleFonts.inriaSerif(fontSize: 20),
+                          style: GoogleFonts.inriaSerif(fontSize: 20,fontWeight: FontWeight.w900),
                         ),
-                        subtitle: Text(
-                          childprofile!["gender"],
-                          style: GoogleFonts.inriaSerif(fontSize: 20),
-                        ),
+                        // subtitle: Text(
+                        //   childprofile!["gender"],
+                        //   style: GoogleFonts.inriaSerif(fontSize: 20),
+                        // ),
                       ),
                     )
                   ],
@@ -123,8 +126,8 @@ class _MychildrenHomeState extends State<MychildrenHome> {
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                             colors: [
-                              Colors.blue,
-                              Colors.purple,
+                              Colors.green.shade800,
+                              Colors.green.shade200,
                             ],
                           ),
                           boxShadow: [
@@ -159,8 +162,8 @@ class _MychildrenHomeState extends State<MychildrenHome> {
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                             colors: [
-                              Colors.blue,
-                              Colors.purple,
+                              Colors.green.shade800,
+                              Colors.green.shade200,
                             ],
                           ),
                           boxShadow: [

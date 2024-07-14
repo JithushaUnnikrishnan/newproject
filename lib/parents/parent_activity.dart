@@ -22,7 +22,7 @@ List<Color> color = [
   Color(0XFFEBFAFE),
 ];
 class _ParentActivityState extends State<ParentActivity> {
-  var Name;
+  var daycreID;
 
   void initState() {
     super.initState();
@@ -32,18 +32,18 @@ class _ParentActivityState extends State<ParentActivity> {
   Future<void> getData() async {
     SharedPreferences spref = await SharedPreferences.getInstance();
     setState(() {
-      Name = spref.getString("Daycare name");
-
+      daycreID = spref.getString("Daycare_id");
     });
     print("sharedPreference Data get");
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Color.fromRGBO(66, 135, 156, 1),
-        toolbarHeight: 122,
+        backgroundColor:Colors.green.shade200,
+        toolbarHeight: 100,
         elevation: 6,
         shadowColor: Colors.grey,
         shape: ContinuousRectangleBorder(
@@ -55,8 +55,8 @@ class _ParentActivityState extends State<ParentActivity> {
           ),
           Text(
             "ACTIVITY",
-            style: GoogleFonts.inriaSerif(
-                fontSize: 38, color: Colors.white, fontWeight: FontWeight.bold),
+            style: GoogleFonts.poppins(
+                fontSize: 20,  fontWeight: FontWeight.bold),
           ),
           SizedBox(
             width: MediaQuery.of(context).size.width * .05,
@@ -64,7 +64,7 @@ class _ParentActivityState extends State<ParentActivity> {
         ]),
       ),
       body: FutureBuilder(
-        future: FirebaseFirestore.instance.collection("DaycareActivity").where("Daycare Name",isEqualTo:Name).get(),
+        future: FirebaseFirestore.instance.collection("DaycareActivity").where("Daycare id",isEqualTo: daycreID).get(),
         builder: (context,AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(

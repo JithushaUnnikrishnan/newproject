@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:scroll_date_picker/scroll_date_picker.dart';
 import 'package:tiny/parents/parent_bottombuton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class ParentFood extends StatefulWidget {
 }
 
 class _ParentFoodState extends State<ParentFood> {
-  var Daycarename;
+  var daycreID;
 
   void initState() {
     super.initState();
@@ -23,18 +24,17 @@ class _ParentFoodState extends State<ParentFood> {
   Future<void> getData() async {
     SharedPreferences spref = await SharedPreferences.getInstance();
     setState(() {
-      Daycarename = spref.getString("name");
+      daycreID = spref.getString("Daycare_id");
     });
     print("sharedPreference Data get");
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-
-          title:  Row(
+          title: Row(
             children: [
-
               // InkWell(onTap: (){
               //   Navigator.push(
               //       context,
@@ -49,17 +49,21 @@ class _ParentFoodState extends State<ParentFood> {
               Image.asset('assets/food1.png'),
               Text('Food',
                   style: GoogleFonts.irishGrover(
-                      fontSize: 60,
-                      color: Color.fromRGBO(211, 134, 64, 1))),
+                      fontSize: 60, color: Color.fromRGBO(211, 134, 64, 1))),
             ],
-
           ),
-          backgroundColor: Color.fromRGBO(254, 231, 127, 1),toolbarHeight: 150,),
-        body:FutureBuilder(
-          future: FirebaseFirestore.instance.collection("Daycarefoodadd").where("Daycare Name",isEqualTo: Daycarename).get(),
-          builder: (context, AsyncSnapshot<QuerySnapshot>snapshot) {
+          backgroundColor: Color.fromRGBO(254, 231, 127, 1),
+          toolbarHeight: 150,
+        ),
+        body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection("Daycarefoodadd")
+              .where("daycare id", isEqualTo: daycreID)
+              .snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator(
+              return Center(
+                  child: CircularProgressIndicator(
                 color: Color(0xFFFEE77F),
               ));
             }
@@ -67,137 +71,249 @@ class _ParentFoodState extends State<ParentFood> {
               return Text("Error:${snapshot.error}");
             }
             final Food = snapshot.data?.docs ?? [];
-            return  ListView.builder(
+            return ListView.builder(
               itemCount: Food.length,
-              itemBuilder: (context, index,) {
-
-                return  SingleChildScrollView(
+              itemBuilder: (
+                context,
+                index,
+              ) {
+                return SingleChildScrollView(
                   // color: Colors.grey.shade100,
                   // height: 900,width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
+                  child: Card(
+                    elevation: 3,
+                    margin: EdgeInsets.symmetric(horizontal: 13,vertical: 16),
+                    child: Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(Food[index]["date"]),
+                          Row(mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(Food[index]["date"],style: TextStyle(fontWeight: FontWeight.w500),),
+                            ],
+                          ),
+                          Text(
+                            "Monday",
+                            style: TextStyle(
+                                color: Colors.black, fontWeight: FontWeight.bold),
+                          ),
+                          ListTile(
+                            leading: Icon(
+                              CupertinoIcons.sunrise,
+                              color: Colors.red.shade300,
+                            ),
+                            title: Row(
+                              children: [
+                                Text("Breakfast :",style: TextStyle(fontWeight: FontWeight.w500),),
+                                Text(Food[index]["MBreakFast"]),
+                              ],
+                            ),
+                          ),
+                          ListTile(
+                            leading: Icon(
+                              CupertinoIcons.sun_max,
+                              color: Colors.yellow.shade700,
+                            ),
+                            title: Row(
 
+                              children: [
+                                Text("Lunch:",style: TextStyle(fontWeight: FontWeight.w500),),
+
+                                Text(Food[index]["MLunch"]),
+                              ],
+                            ),
+                          ),
+                          ListTile(
+                            leading: Icon(
+                              CupertinoIcons.sunset_fill,
+                              color: Colors.orangeAccent,
+                            ),
+                            title: Row(
+                              children: [
+                                Text("Snack :",style: TextStyle(fontWeight: FontWeight.w500),),
+
+                                Text(Food[index]["MSnack"]),
+                              ],
+                            ),
+                          ),
+                          Divider(),
+
+                          Text(
+                            "Tuesday",
+                            style: TextStyle(
+                                color: Colors.black, fontWeight: FontWeight.bold),
+                          ),
+                          ListTile(
+                            leading: Icon(CupertinoIcons.sunrise,
+                                color: Colors.red.shade300),
+                            title: Row(
+                              children: [
+                                Text("Breakfast :",style: TextStyle(fontWeight: FontWeight.w500),),
+
+                                Text(Food[index]["MBreakFast"]),
+                              ],
+                            ),
+                          ),
+                          ListTile(
+                            leading: Icon(CupertinoIcons.sun_max,
+                                color: Colors.yellow.shade700),
+                            title: Row(
+                              children: [
+                                Text("Lunch :",style: TextStyle(fontWeight: FontWeight.w500),),
+
+                                Text(Food[index]["TuLunch"]),
+                              ],
+                            ),
+                          ),
+                          ListTile(
+                            leading: Icon(
+                              CupertinoIcons.sunset_fill,
+                              color: Colors.deepOrange,
+                            ),
+                            title: Row(
+                              children: [
+                                Text("Snack :",style: TextStyle(fontWeight: FontWeight.w500),),
+
+                                Text(Food[index]["TuSnack"]),
+                              ],
+                            ),
+                          ),
+                          Divider(),
+
+                          Text(
+                            "Wednesday",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, color: Colors.black),
+                          ),
+                          ListTile(
+                            leading: Icon(CupertinoIcons.sunrise,
+                                color: Colors.red.shade300),
+                            title: Row(
+                              children: [
+                                Text("Breakfast :",style: TextStyle(fontWeight: FontWeight.w500),),
+
+                                Text(Food[index]["WBreakFast"]),
+                              ],
+                            ),
+                          ),
+                          ListTile(
+                            leading: Icon(CupertinoIcons.sun_max,
+                                color: Colors.yellow.shade700),
+                            title: Row(
+                              children: [
+                                Text("Lunch :",style: TextStyle(fontWeight: FontWeight.w500),),
+
+                                Text(Food[index]["WLunch"]),
+                              ],
+                            ),
+                          ),
+                          ListTile(
+                            leading: Icon(
+                              CupertinoIcons.sunset_fill,
+                              color: Colors.deepOrange,
+                            ),
+                            title: Row(
+                              children: [
+                                Text("Snack :",style: TextStyle(fontWeight: FontWeight.w500),),
+
+                                Text(Food[index]["WSnack"]),
+                              ],
+                            ),
+                          ),
+                          Divider(),
+
+                          Text(
+                            "Thursday",
+                            style: TextStyle(
+                                color: Colors.black, fontWeight: FontWeight.bold),
+                          ),
+                          ListTile(
+                            leading: Icon(CupertinoIcons.sunrise,
+                                color: Colors.red.shade300),
+                            title: Row(
+                              children: [
+                                Text("Breakfast :",style: TextStyle(fontWeight: FontWeight.w500),),
+
+                                Text(Food[index]["ThBreakFast"]),
+                              ],
+                            ),
+                          ),
+                          ListTile(
+                            leading: Icon(CupertinoIcons.sun_max,
+                                color: Colors.yellow.shade700),
+                            title: Row(
+                              children: [
+                                Text("Lunch :",style: TextStyle(fontWeight: FontWeight.w500),),
+
+                                Text(Food[index]["ThLunch"]),
+                              ],
+                            ),
+                          ),
+                          ListTile(
+                            leading: Icon(
+                              CupertinoIcons.sunset_fill,
+                              color: Colors.deepOrange,
+                            ),
+                            title: Row(
+                              children: [
+                                Text("Snack :",style: TextStyle(fontWeight: FontWeight.w500),),
+
+                                Text(Food[index]["ThSnack"]),
+                              ],
+                            ),
+                          ),
+                          Divider(),
+
+                          Text(
+                            "Friday",
+                            style: TextStyle(
+                                color: Colors.black, fontWeight: FontWeight.bold),
+                          ),
+                          ListTile(
+                            leading: Icon(CupertinoIcons.sunrise,
+                                color: Colors.red.shade300),
+                            title: Row(
+                              children: [
+                                Text("Breakfast :",style: TextStyle(fontWeight: FontWeight.w500),),
+
+                                Text(Food[index]["FBreakFast"]),
+                              ],
+                            ),
+                          ),
+                          ListTile(
+                            leading: Icon(CupertinoIcons.sun_max,
+                                color: Colors.yellow.shade700),
+                            title: Row(
+                              children: [
+                                Text("Lunch :",style: TextStyle(fontWeight: FontWeight.w500),),
+
+                                Text(Food[index]["FLunch"]),
+                              ],
+                            ),
+                          ),
+                          ListTile(
+                            leading: Icon(
+                              CupertinoIcons.sunset_fill,
+                              color: Colors.deepOrange,
+                            ),
+                            title: Row(
+                              children: [
+                                Text("Snack :",style: TextStyle(fontWeight: FontWeight.w500),),
+
+                                Text(Food[index]["FSnack"]),
+                              ],
+                            ),
+                          ),
+                          Divider(),
                         ],
                       ),
-
-                      Text(
-                        "Monday",
-                        style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          CupertinoIcons.sunrise,
-                          color: Colors.red.shade300,
-                        ),
-                        title: Text(Food[index]["MBreakFast"]),
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          CupertinoIcons.sun_max,
-                          color: Colors.yellow.shade700,
-                        ),
-                        title: Text(Food[index]["MLunch"]),
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          CupertinoIcons.sunset_fill,
-                          color: Colors.orangeAccent,
-                        ),
-                        title: Text(Food[index]["MSnack"]),
-                      ),
-                      Text(
-                        "Tuesday",
-                        style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
-                      ),
-                      ListTile(
-                        leading: Icon(CupertinoIcons.sunrise, color: Colors.red.shade300),
-                        title: Text(Food[index]["MBreakFast"]),
-                      ),
-                      ListTile(
-                        leading:
-                        Icon(CupertinoIcons.sun_max, color: Colors.yellow.shade700),
-                        title: Text(Food[index]["TuLunch"]),
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          CupertinoIcons.sunset_fill,
-                          color: Colors.deepOrange,
-                        ),
-                        title: Text(Food[index]["TuSnack"]),
-                      ),
-                      Text(
-                        "Wednesday",
-                        style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black),
-                      ),
-                      ListTile(
-                        leading: Icon(CupertinoIcons.sunrise, color: Colors.red.shade300),
-                        title: Text(Food[index]["WBreakFast"]),
-                      ),
-                      ListTile(
-                        leading:
-                        Icon(CupertinoIcons.sun_max, color: Colors.yellow.shade700),
-                        title: Text(Food[index]["WLunch"]),
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          CupertinoIcons.sunset_fill,
-                          color: Colors.deepOrange,
-                        ),
-                        title: Text(Food[index]["WSnack"]),
-                      ),
-                      Text(
-                        "Thursday",
-                        style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
-                      ),
-                      ListTile(
-                        leading: Icon(CupertinoIcons.sunrise, color: Colors.red.shade300),
-                        title: Text(Food[index]["ThBreakFast"]),
-                      ),
-                      ListTile(
-                        leading:
-                        Icon(CupertinoIcons.sun_max, color: Colors.yellow.shade700),
-                        title: Text(Food[index]["ThLunch"]),
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          CupertinoIcons.sunset_fill,
-                          color: Colors.deepOrange,
-                        ),
-                        title: Text(Food[index]["ThSnack"]),
-                      ),
-                      Text(
-                        "Friday",
-                        style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
-                      ),
-                      ListTile(
-                        leading: Icon(CupertinoIcons.sunrise, color: Colors.red.shade300),
-                        title: Text(Food[index]["FBreakFast"]),
-                      ),
-                      ListTile(
-                        leading:
-                        Icon(CupertinoIcons.sun_max, color: Colors.yellow.shade700),
-                        title: Text(Food[index]["FLunch"]),
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          CupertinoIcons.sunset_fill,
-                          color: Colors.deepOrange,
-                        ),
-                        title: Text(Food[index]["FSnack"]),
-
-                      ),
-                      Divider(),
-                    ],
+                    ),
                   ),
                 );
-              },);
+              },
+            );
           },
-        )
-
-    );
+        ));
   }
 }

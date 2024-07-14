@@ -17,7 +17,7 @@ class DaycareHome extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight: 122,
-        backgroundColor: Color.fromRGBO(117, 10, 100, 1),
+        backgroundColor: Colors.green.shade200,
         elevation: 10,
         shadowColor: Colors.black,
         shape: ContinuousRectangleBorder(
@@ -34,7 +34,7 @@ class DaycareHome extends StatelessWidget {
             SizedBox(width: 10),
             Text(
               "My School",
-              style: GoogleFonts.inriaSerif(color: Colors.white, fontSize: 30),
+              style: GoogleFonts.inriaSerif( fontSize: 30),
             ),
           ],
         ),

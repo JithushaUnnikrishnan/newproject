@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'daycare_dredit.dart';
+
 
 class Drview extends StatefulWidget {
   const Drview({super.key, required this.id});
@@ -55,10 +55,17 @@ class _DrviewState extends State<Drview> {
 
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 80,
+        title:Text(doct!["Username"],style: GoogleFonts.poppins(fontSize: 20,fontWeight: FontWeight.w900),) ,
+
+        toolbarHeight: 100,
+        backgroundColor: Colors.green.shade200,
+        shape: ContinuousRectangleBorder(
+            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(80))),
+        elevation: 4,
+        shadowColor: Colors.grey,
       ),
       body: Container(
-        margin: EdgeInsets.only(top: 30, left: 40),
+        margin: EdgeInsets.only(top: 50, left: 80),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -84,7 +91,7 @@ class _DrviewState extends State<Drview> {
       children: [
         Icon(icon),
         SizedBox(width: MediaQuery.of(context).size.width * .05),
-        Text(info, style: GoogleFonts.inriaSerif(fontSize: 15)),
+        Text(info, style: GoogleFonts.inriaSerif(fontSize: 18)),
       ],
     );
   }

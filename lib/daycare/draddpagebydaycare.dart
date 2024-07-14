@@ -15,7 +15,7 @@ class DrAdd extends StatefulWidget {
 }
 
 class _DrAddState extends State<DrAdd> {
-  var name;
+  var ID;
 
   @override
   void initState() {
@@ -26,7 +26,7 @@ class _DrAddState extends State<DrAdd> {
   Future<void> getData() async {
     SharedPreferences spref = await SharedPreferences.getInstance();
     setState(() {
-      name = spref.getString("name");
+      ID = spref.getString("id");
     });
     print("sharedPreference Data get");
   }
@@ -63,16 +63,24 @@ class _DrAddState extends State<DrAdd> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      floatingActionButton: FloatingActionButton(
+      appBar: AppBar(
+        backgroundColor: Colors.green.shade200,
+        elevation: 4,
+        shadowColor: Colors.grey,
+        shape: ContinuousRectangleBorder(
+            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(80))),
+        toolbarHeight: 100,
+        title: Text("Doctors",style: GoogleFonts.poppins(fontSize: 20,fontWeight: FontWeight.w900),),
+      ),
+      floatingActionButton: FloatingActionButton(backgroundColor: Colors.green.shade200,
         onPressed: () {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => DoctorSignup()));
         },
-        child: Center(child: Text("+",style: TextStyle(fontSize: 35),)),
+        child: Center(child: Text("+",style: TextStyle(fontSize: 35,color: Colors.white,fontWeight: FontWeight.bold),)),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("DoctorReg").where("Daycare Name",isEqualTo: name).snapshots(),
+        stream: FirebaseFirestore.instance.collection("DoctorReg").where("Daycare_id",isEqualTo: ID).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator(
@@ -94,7 +102,7 @@ class _DrAddState extends State<DrAdd> {
                   },
                       title: Text(Dr[index]["Username"],
                           style: GoogleFonts.inriaSerif(
-                              fontSize: 20, color: Colors.black)),
+                              fontSize: 20, color: Colors.black,fontWeight: FontWeight.w900)),
                       subtitle:
 
                       Text(Dr[index]["homeaddress"],
@@ -107,7 +115,7 @@ class _DrAddState extends State<DrAdd> {
                           onPressed: () {
                             showDeleteDialog(context, Dr[index].id);
                           },
-                          icon: Icon(CupertinoIcons.delete))
+                          icon: Icon(Icons.delete,color: Colors.red,))
                   ),
                 ),);
             },

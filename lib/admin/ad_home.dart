@@ -31,7 +31,10 @@ class _AdminHomeState extends State<AdminHome> {
   }
 
   Future<void> deleteDaycare(String id) async {
-    await FirebaseFirestore.instance.collection("DaycareRegister").doc(id).delete();
+    await FirebaseFirestore.instance
+        .collection("DaycareRegister")
+        .doc(id)
+        .delete();
   }
 
   @override
@@ -59,7 +62,8 @@ class _AdminHomeState extends State<AdminHome> {
               var status = daycaree[index]["status"];
               if (status == 2) {
                 deleteDaycare(daycaree[index].id);
-                return SizedBox.shrink(); // Return an empty widget if the document is deleted
+                return SizedBox
+                    .shrink(); // Return an empty widget if the document is deleted
               }
               return Container(
                 margin: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
@@ -106,16 +110,18 @@ class _AdminHomeState extends State<AdminHome> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => AdminDaycare(id: daycaree[index].id),
+                                    builder: (context) =>
+                                        AdminDaycare(id: daycaree[index].id),
                                   ),
                                 );
                               },
                               child: Container(
                                 height: 35,
-                                width: 80,
+                                width: 90,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: status == 1 ? Colors.green : Colors.blue,
+                                  color:
+                                      status == 1 ? Colors.green : Colors.blue,
                                   boxShadow: [
                                     BoxShadow(
                                       color: Colors.grey.shade300,
@@ -127,7 +133,11 @@ class _AdminHomeState extends State<AdminHome> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    status == 1 ? "ACCEPTED" : "PENDING",
+                                    status == 1
+                                        ? "ACCEPTED"
+                                        : status == 2
+                                            ? "REJECTED"
+                                            : "PENDING",
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,

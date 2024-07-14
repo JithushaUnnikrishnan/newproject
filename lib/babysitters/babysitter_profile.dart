@@ -55,10 +55,10 @@ class _TeacherProfileState extends State<TeacherProfile> {
         final imageURL = await ref.getDownloadURL();
 
         await FirebaseFirestore.instance
-            .collection('Daycare AddStaff')
+            .collection('DaycareAddStaff')
             .doc(id)
             .update({
-          'path': imageURL,
+          'Path': imageURL,
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -105,7 +105,7 @@ class _TeacherProfileState extends State<TeacherProfile> {
 
   Getfirebase() async {
     Babysitter = await FirebaseFirestore.instance
-        .collection("Daycare AddStaff")
+        .collection("DaycareAddStaff")
         .doc(id)
         .get();
   }
@@ -130,24 +130,24 @@ class _TeacherProfileState extends State<TeacherProfile> {
               children: [
                 Container(
                   child: Column(
+
                     children: [
                       ListTile(
                         leading: isloading
                             ? CircularProgressIndicator(
                                 color: Color(0xFFC65264),
                               )
-                            : Container(
-                                height:
-                                    MediaQuery.of(context).size.height * .09,
-                                width: MediaQuery.of(context).size.width * .15,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    image: DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: NetworkImage(
-                                          Babysitter!["path"],
-                                        ))),
-                              ),
+                            : Babysitter!["Path"] == null
+                                ? Text("loading....")
+                                : Container(
+height: 200,width: 75,
+                                    child: ClipRRect(borderRadius: BorderRadius.circular(50),
+                                      child: Image(fit: BoxFit.fill,
+                                          image: NetworkImage(
+                                        Babysitter!["Path"],
+                                      )),
+                                    ),
+                                  ),
                         trailing: InkWell(
                           onTap: () {
                             Navigator.push(
@@ -172,14 +172,7 @@ class _TeacherProfileState extends State<TeacherProfile> {
                             ),
                           ),
                         ),
-                        title: Padding(
-                          padding: const EdgeInsets.only(left: 30),
-                          child: Text(
-                            Babysitter!['Staff Name'],
-                            style: GoogleFonts.inriaSerif(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                        ),
+
                         // subtitle: Padding(
                         //   padding: const EdgeInsets.only(left: 30),
                         //   child: Text(
@@ -193,6 +186,31 @@ class _TeacherProfileState extends State<TeacherProfile> {
                         height: 40,
                       ),
                       Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Row(
+                          children: [
+                            Text(
+                              Babysitter!['StaffName'],
+                              style: GoogleFonts.inriaSerif(
+                                  fontSize: 25, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20.0),
+                        child: Row(
+                          children: [
+
+                            Text("Daycare Name :",style: TextStyle(fontWeight: FontWeight.w800,fontSize: 20),),
+                          ],
+                        ),
+                      ),
+
+                      Padding(
                         padding: const EdgeInsets.only(left: 20.0),
                         child: Row(
                           children: [
@@ -200,10 +218,15 @@ class _TeacherProfileState extends State<TeacherProfile> {
                             SizedBox(
                               width: MediaQuery.of(context).size.width * .02,
                             ),
-                            Text(Babysitter!['Daycare Name']),
+                            Text(Babysitter!['DaycareName'],style: TextStyle(fontSize: 18)),
                           ],
                         ),
                       ),
+
+                      SizedBox(
+                        height: 15,
+                      ),
+
                       Divider(
                         indent: 10,
                         endIndent: 10,
@@ -211,24 +234,14 @@ class _TeacherProfileState extends State<TeacherProfile> {
                       SizedBox(
                         height: 15,
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(left: 20.0),
-                      //   child: Row(
-                      //     children: [
-                      //       Icon(CupertinoIcons.home),
-                      //       SizedBox(
-                      //         width: MediaQuery.of(context).size.width * .02,
-                      //       ),
-                      //       Text(Babysitter!['Address']),
-                      //     ],
-                      //   ),
-                      // ),
-                      Divider(
-                        indent: 10,
-                        endIndent: 10,
-                      ),
-                      SizedBox(
-                        height: 15,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20.0),
+                        child: Row(
+                          children: [
+
+                            Text("Qualification :",style: TextStyle(fontWeight: FontWeight.w800,fontSize: 20)),
+                          ],
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 20.0),
@@ -238,7 +251,7 @@ class _TeacherProfileState extends State<TeacherProfile> {
                             SizedBox(
                               width: MediaQuery.of(context).size.width * .02,
                             ),
-                            Text(Babysitter!['Qualification']),
+                            Text(Babysitter!['Qualification'],style: TextStyle(fontSize: 18)),
                           ],
                         ),
                       ),
@@ -249,24 +262,16 @@ class _TeacherProfileState extends State<TeacherProfile> {
                       SizedBox(
                         height: 15,
                       ),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(left: 20.0),
-                      //   child: Row(
-                      //     children: [
-                      //       Icon(Icons.calendar_month),
-                      //       SizedBox(
-                      //         width: MediaQuery.of(context).size.width * .02,
-                      //       ),
-                      //       Text(Babysitter!['experiance']),
-                      //     ],
-                      //   ),
-                      // ),
-                      Divider(
-                        indent: 10,
-                        endIndent: 10,
-                      ),
-                      SizedBox(
-                        height: 15,
+
+
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20.0),
+                        child: Row(
+                          children: [
+
+                            Text("Phone number",style: TextStyle(fontWeight: FontWeight.w800,fontSize: 20)),
+                          ],
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 20.0),
@@ -276,17 +281,11 @@ class _TeacherProfileState extends State<TeacherProfile> {
                             SizedBox(
                               height: MediaQuery.of(context).size.height * .02,
                             ),
-                            Text(Babysitter!['Phone']),
+                            Text(Babysitter!['Phone'],style: TextStyle(fontSize: 18)),
                           ],
                         ),
                       ),
-                      Divider(
-                        indent: 10,
-                        endIndent: 10,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
+
                       // Padding(
                       //   padding: const EdgeInsets.only(left: 20.0),
                       //   child: Row(
@@ -311,7 +310,7 @@ class _TeacherProfileState extends State<TeacherProfile> {
                       ),
                       InkWell(
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => SelectCategoryreg()));
@@ -332,8 +331,8 @@ class _TeacherProfileState extends State<TeacherProfile> {
                   ),
                 ),
                 Positioned(
-                    top: 45,
-                    left: 50,
+                    top: 35,
+                    left: 60,
                     child: IconButton(
                         onPressed: () {
                           setState(() {

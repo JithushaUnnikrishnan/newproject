@@ -41,6 +41,10 @@ class _ActivityEditState extends State<ActivityEdit> {
     return Form(key: formKey,
       child: Scaffold(
         appBar: AppBar(
+          toolbarHeight: 100,
+          backgroundColor: Colors.green.shade200,
+          elevation: 3,
+          shadowColor: Colors.grey,
           automaticallyImplyLeading: false,
           title: Row(
             children: [
@@ -55,7 +59,7 @@ class _ActivityEditState extends State<ActivityEdit> {
               SizedBox(
                 width: MediaQuery.of(context).size.width * .35,
               ),
-              Text("Edit", style: GoogleFonts.ubuntu(color: Color(0xFFC24A6B))),
+              Text("Edit", style: GoogleFonts.ubuntu()),
             ],
           ),
         ),
@@ -80,7 +84,7 @@ class _ActivityEditState extends State<ActivityEdit> {
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * .51,
+                height: MediaQuery.of(context).size.height * .03,
               ),
               InkWell(
                   onTap: () {
@@ -88,22 +92,19 @@ class _ActivityEditState extends State<ActivityEdit> {
                       Activityed();
                     }
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 80, bottom: 10),
-                    child: Container(
-                        height: 53,
-                        width: 150,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.blue),
-                        child: Center(
-                          child: Text('Update',
-                              style: GoogleFonts.ubuntu(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white)),
-                        )),
-                  )),
+                  child: Container(
+                      height: 53,
+                      width: 150,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.green.shade900),
+                      child: Center(
+                        child: Text('Update',
+                            style: GoogleFonts.ubuntu(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white)),
+                      ))),
             ]),
           ),
         ),

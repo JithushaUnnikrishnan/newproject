@@ -71,7 +71,7 @@ class _DaycareRegisterState extends State<DaycareRegister> {
       _isLoading = false;
     });
 
-    Navigator.push(
+    Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => DaycareLogin()));
   }
 
@@ -94,6 +94,34 @@ class _DaycareRegisterState extends State<DaycareRegister> {
     }
     return null;
   }
+  final RegExp passwordRegExp = RegExp(
+    r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$',
+  );
+
+  String? _validatePassword(BuildContext context, String? value) {
+    try {
+      if (value == null || value.isEmpty) {
+        return 'Password is required';
+      } else if (!passwordRegExp.hasMatch(value)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character'),
+          ),
+        );
+        return 'An error occurred while validating the password:';
+      }
+      return null;
+    } catch (e) {
+      // Display the error message using ScaffoldMessenger
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('An error occurred while validating the password: $e'),
+        ),
+      );
+      return 'An unexpected error occurred';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +140,7 @@ class _DaycareRegisterState extends State<DaycareRegister> {
                       image: DecorationImage(
                           image: AssetImage("assets/pregister.png"))),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                 TextFormField(
                   controller: preschoolNameController,
                   validator: (value) {
@@ -128,7 +156,7 @@ class _DaycareRegisterState extends State<DaycareRegister> {
                       labelStyle:
                       GoogleFonts.inriaSerif(color: Colors.grey, fontSize: 20)),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                 TextFormField(
                   keyboardType: TextInputType.phone,
                   controller: phoneController,
@@ -140,7 +168,7 @@ class _DaycareRegisterState extends State<DaycareRegister> {
                       labelStyle:
                       GoogleFonts.inriaSerif(color: Colors.grey, fontSize: 20)),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                 TextFormField(
                   keyboardType: TextInputType.emailAddress,
                   controller: emailController,
@@ -152,16 +180,11 @@ class _DaycareRegisterState extends State<DaycareRegister> {
                       labelStyle:
                       GoogleFonts.inriaSerif(color: Colors.grey, fontSize: 20)),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                 TextFormField(
                   obscureText: true,
                   controller: passwordController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Password is required!";
-                    }
-                    return null;
-                  },
+                  validator: (value) => _validatePassword(context, value),
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
@@ -169,7 +192,7 @@ class _DaycareRegisterState extends State<DaycareRegister> {
                       labelStyle:
                       GoogleFonts.inriaSerif(color: Colors.grey, fontSize: 20)),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                 TextFormField(
                   controller: preschoolAddressController,
                   validator: (value) {
@@ -185,7 +208,7 @@ class _DaycareRegisterState extends State<DaycareRegister> {
                       labelStyle:
                       GoogleFonts.inriaSerif(color: Colors.grey, fontSize: 20)),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                 _isLoading
                     ? CircularProgressIndicator()
                     : TextButton(
@@ -193,7 +216,7 @@ class _DaycareRegisterState extends State<DaycareRegister> {
                   style: TextButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5)),
-                    backgroundColor: Colors.blue.shade900,
+                    backgroundColor: Colors.green.shade900,
                     foregroundColor: Colors.white,
                   ),
                   child: Text("Upload Certificate"),
@@ -203,7 +226,7 @@ class _DaycareRegisterState extends State<DaycareRegister> {
                     'Certificate Selected',
                     style: TextStyle(color: Colors.green),
                   ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                 InkWell(
                   onTap: () {
                     if (formKey.currentState!.validate()) {
@@ -215,7 +238,7 @@ class _DaycareRegisterState extends State<DaycareRegister> {
                     width: 200,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.blue[900]),
+                        color: Colors.green[900]),
                     child: Center(
                       child: Text(
                         "Register",
@@ -227,7 +250,7 @@ class _DaycareRegisterState extends State<DaycareRegister> {
                     ),
                   ),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -235,7 +258,7 @@ class _DaycareRegisterState extends State<DaycareRegister> {
                         style: TextStyle(fontSize: 15)),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => DaycareLogin(),
@@ -245,7 +268,7 @@ class _DaycareRegisterState extends State<DaycareRegister> {
                       child: Text(
                         "Login",
                         style: TextStyle(
-                          color: Colors.blue.shade900,
+                          color: Colors.green.shade900,
                           fontSize: 15,
                         ),
                       ),
@@ -258,6 +281,7 @@ class _DaycareRegisterState extends State<DaycareRegister> {
         ),
         backgroundColor: Colors.white,
       ),
+
     );
   }
 }

@@ -1,15 +1,11 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tiny/parents/penroll_edit.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../logo/logo_page.dart';
-import '../logo/select_categoryfor reg.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class EnrollChild extends StatefulWidget {
@@ -21,13 +17,13 @@ class EnrollChild extends StatefulWidget {
 
 class _EnrollChildState extends State<EnrollChild> {
   PickedFile? _image;
-  bool isloading = false;
+  bool isLoading = false;
+
   Future<void> _getImage() async {
     setState(() {
-      isloading = true;
+      isLoading = true;
     });
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     setState(() {
       if (pickedFile != null) {
@@ -64,7 +60,7 @@ class _EnrollChildState extends State<EnrollChild> {
           ),
         );
         setState(() {
-          isloading = false;
+          isLoading = false;
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -85,6 +81,7 @@ class _EnrollChildState extends State<EnrollChild> {
 
   var ID;
 
+  @override
   void initState() {
     super.initState();
     getData();
@@ -98,10 +95,10 @@ class _EnrollChildState extends State<EnrollChild> {
     print("sharedPreference Data get");
   }
 
-  DocumentSnapshot? Parentchildprofile;
+  DocumentSnapshot? parentChildProfile;
 
-  Getfirebase() async {
-    Parentchildprofile = await FirebaseFirestore.instance
+  Future<void> getFirebaseData() async {
+    parentChildProfile = await FirebaseFirestore.instance
         .collection("ParentRegister")
         .doc(ID)
         .get();
@@ -110,209 +107,161 @@ class _EnrollChildState extends State<EnrollChild> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Getfirebase(),
+      future: getFirebaseData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
-              child: CircularProgressIndicator(
-            color: Color(0xFF0E6174),
-          ));
+            child: CircularProgressIndicator(
+              color: Color(0xFF0E6174),
+            ),
+          );
         }
         if (snapshot.hasError) {
-          return Text("Error${snapshot.error}");
+          return Center(
+            child: Text("Error: ${snapshot.error}"),
+          );
         }
         return Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            toolbarHeight: 122,
-            backgroundColor: Color.fromRGBO(66, 135, 156, 1),
+            toolbarHeight: 100,
+            backgroundColor: Colors.green.shade200,
             shadowColor: Colors.grey,
             elevation: 10,
-            shape: ContinuousRectangleBorder(
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(80)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
+              ),
+            ),
+            title: Text(
+              'Enroll Child',
+              style: GoogleFonts.lato(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             actions: [
-              InkWell(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => EnrollEdit()));
+              IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => EnrollEdit()),
+                  );
                 },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Edit",
-                        style: GoogleFonts.inriaSerif(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * .010,
-                      ),
-                      Icon(
-                        Icons.edit,
-                        color: Colors.black,
-                        size: 25,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * .060,
               ),
             ],
           ),
           body: Container(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Stack(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * .02,
-                      ),
-                      // Parentchildprofile!["path"] == '1'
-                      //     ? Container(
-                      //         height: MediaQuery.of(context).size.height * .09,
-                      //         width: MediaQuery.of(context).size.width * .15,
-                      //         decoration: BoxDecoration(
-                      //             borderRadius: BorderRadius.circular(10),
-                      //             image: DecorationImage(
-                      //                 image: AssetImage("assets/m.png"),
-                      //                 fit: BoxFit.fill)),
-                      //       )
-                      isloading
-                          ? CircularProgressIndicator(
-                        color: Color(0xFFC65264),
-                      )
-                          : Container(
-                              height: MediaQuery.of(context).size.height * .09,
-                              width: MediaQuery.of(context).size.width * .15,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                          Parentchildprofile!["path"]),
-                                      fit: BoxFit.fill)),
-                            ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * .04,
-                      ),
-                      Text(
-                        "Child Name",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      Text(Parentchildprofile!["Child name"]),
-                      Divider(
-                        color: Colors.grey,
-                        endIndent: 20,
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * .01,
-                      ),
-                      Icon(
-                        Icons.home,
-                        color: Colors.grey,
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * .01,
-                      ),
-                      Text(Parentchildprofile!["Address"]),
-                      Divider(
-                        endIndent: 20,
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * .01,
-                      ),
-                      Icon(
-                        Icons.calendar_month_rounded,
-                        color: Colors.grey,
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * .01,
-                      ),
-                      Text(Parentchildprofile!["Date of birth"]),
-                      Divider(
-                        endIndent: 20,
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * .01,
-                      ),
-                      Text(
-                        "Parent Name",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * .01,
-                      ),
-                      Text(Parentchildprofile!["Parent Name"]),
-                      // Divider(
-                      //   endIndent: 20,
-                      // ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.1,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 25),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LogoPage()));
-                          },
-                          child: Container(
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.3,
-                                  ),
-                                  Text("Logout",
-                                      style: GoogleFonts.ubuntu(
-                                          color: Colors.white, fontSize: 20)),
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.015,
-                                  ),
-                                  Icon(
-                                    Icons.login_outlined,
-                                    color: Colors.white,
-                                  )
-                                ],
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Stack(
+              children: [
+                ListView(
+                  children: [
+                    SizedBox(height: 20),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Stack(
+                        children: [
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundImage: _image == null
+                                ? NetworkImage(parentChildProfile!["path"])
+                                : FileImage(File(_image!.path)) as ImageProvider,
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: GestureDetector(
+                              onTap: _getImage,
+                              child: Container(
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFC65264),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
                               ),
-                              height: MediaQuery.of(context).size.height * 0.07,
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Color(0xFFC65264),
-                              )),
-                        ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
+                    SizedBox(height: 20),
+                    buildProfileDetail('Child Name', parentChildProfile!["Child name"]),
+                    buildProfileDetail('Address', parentChildProfile!["Address"]),
+                    buildProfileDetail('Date of Birth', parentChildProfile!["Date of birth"]),
+                    buildProfileDetail('Parent Name', parentChildProfile!["Parent Name"]),
+                    SizedBox(height: 30),
+                    Center(
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), backgroundColor: Color(0xFFC65264),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        icon: Icon(Icons.logout, color: Colors.white),
+                        label: Text(
+                          'Logout',
+                          style: GoogleFonts.ubuntu(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => LogoPage()),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                if (isLoading)
+                  Center(
+                    child: CircularProgressIndicator(
+                      color: Color(0xFFC65264),
+                    ),
                   ),
-                  Positioned(
-                      top: 65,
-                      left: 35,
-                      child: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _getImage();
-                            });
-                          },
-                          icon: Icon(Icons.camera_alt_outlined))),
-                ],
-              ),
+              ],
             ),
           ),
         );
       },
+    );
+  }
+
+  Widget buildProfileDetail(String title, String detail) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: GoogleFonts.lato(
+              color: Colors.grey[600],
+              fontSize: 16,
+            ),
+          ),
+          Text(
+            detail,
+            style: GoogleFonts.lato(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+          Divider(color: Colors.grey[300]),
+        ],
+      ),
     );
   }
 }

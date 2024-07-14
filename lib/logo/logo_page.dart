@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:tiny/admin/login_page.dart';
 import 'package:tiny/logo/select_categoryfor%20reg.dart';
 
@@ -14,6 +16,14 @@ class LogoPage extends StatefulWidget {
 }
 
 class _LogoPageState extends State<LogoPage> {
+
+  void initState() {
+    super.initState();
+    Timer(
+        Duration(seconds: 3),
+            () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => (SelectCategoryreg()))));
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,20 +49,20 @@ class _LogoPageState extends State<LogoPage> {
             SizedBox(
               height: MediaQuery.of(context).size.height * .20,
             ),
-            Container(
-              height: 55,width: 150,decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 0.5),
-               borderRadius: BorderRadius.circular(10),boxShadow: [
-                 BoxShadow(offset: Offset(0, 3),spreadRadius: 2,blurRadius: 2,color: Colors.black45)
-            ]
-            ),
-              child: Center(child: GestureDetector(onTap: (){
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SelectCategoryreg()));
-              },
-                  child: Text('Start' ,style: GoogleFonts.fruktur(fontSize: 45,fontWeight:FontWeight.bold),))),
-            )
+            // Container(
+            //   height: 55,width: 150,decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 0.5),
+            //    borderRadius: BorderRadius.circular(10),boxShadow: [
+            //      BoxShadow(offset: Offset(0, 3),spreadRadius: 2,blurRadius: 2,color: Colors.black45)
+            // ]
+            // ),
+            //   // child: Center(child: GestureDetector(onTap: (){
+            //   //   Navigator.push(
+            //   //       context,
+            //   //       MaterialPageRoute(
+            //   //           builder: (context) => SelectCategoryreg()));
+            //   // },
+            //   //     child: Text('Start' ,style: GoogleFonts.fruktur(fontSize: 45,fontWeight:FontWeight.bold),))),
+            // )
           ],
         ),
       ),

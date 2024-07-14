@@ -23,7 +23,7 @@ List<Color> color = [
   Color(0XFFEBFAFE),
 ];
 class _TeacherActivityState extends State<TeacherActivity> {
-  var name;
+  var dayid;
 
   void initState() {
     super.initState();
@@ -33,7 +33,7 @@ class _TeacherActivityState extends State<TeacherActivity> {
   Future<void> getData() async {
     SharedPreferences spref = await SharedPreferences.getInstance();
     setState(() {
-      name = spref.getString("name");
+      dayid = spref.getString("Daycareid");
     });
     print("sharedPreference Data get");
   }
@@ -43,21 +43,19 @@ class _TeacherActivityState extends State<TeacherActivity> {
 
           appBar: AppBar(
 
-            backgroundColor: Color.fromRGBO(66, 135, 156, 1),
-            toolbarHeight: 122,
+            backgroundColor: Colors.green.shade200,
+            toolbarHeight: 100,
             elevation: 6,
             shadowColor: Colors.grey,
             shape: ContinuousRectangleBorder(
                 borderRadius: BorderRadius.only(bottomLeft: Radius.circular(80))),
             title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
 
-              SizedBox(
-                width: MediaQuery.of(context).size.width * .15,
-              ),
+
               Text(
                 "ACTIVITY",
-                style: GoogleFonts.inriaSerif(
-                    fontSize: 38, color: Colors.white, fontWeight: FontWeight.bold),
+                style: GoogleFonts.poppins(
+                    fontSize: 20,  fontWeight: FontWeight.w900),
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width * .05,
@@ -65,7 +63,7 @@ class _TeacherActivityState extends State<TeacherActivity> {
             ]),
           ),
           body: FutureBuilder(
-            future: FirebaseFirestore.instance.collection("DaycareActivity").where("Daycare Name",isEqualTo:name).get(),
+            future: FirebaseFirestore.instance.collection("DaycareActivity").where("Daycare id",isEqualTo:dayid).get(),
             builder: (context,AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator(

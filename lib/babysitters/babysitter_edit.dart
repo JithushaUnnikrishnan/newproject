@@ -64,10 +64,10 @@ class _BabysitterEditState extends State<BabysitterEdit> {
 
   Future<dynamic> TrEdit() async {
     await FirebaseFirestore.instance
-        .collection("Daycare AddStaff")
+        .collection("DaycareAddStaff")
         .doc(ID)
         .update({
-      "Staff Name": Name.text,
+      "StaffName": Name.text,
       // "address": Address.text,
       "Qualification": Qualification.text,
       // "experiance": Experience.text,
@@ -78,7 +78,7 @@ class _BabysitterEditState extends State<BabysitterEdit> {
 
     setState(() {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => TeacherProfile()));
+          context, MaterialPageRoute(builder: (context) => BottomButton()));
     });
   }
 
@@ -101,262 +101,208 @@ class _BabysitterEditState extends State<BabysitterEdit> {
     return Form(
       key: formkey,
       child: Scaffold(
+        appBar: AppBar(toolbarHeight: 100,backgroundColor: Colors.green.shade200,title:Text("Edit",style: GoogleFonts.poppins(fontWeight: FontWeight.w700),) ,),
         body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 35),
-            child: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 5),
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 25),
-                              child: Icon(Icons.arrow_back),
-                            )),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * .02,
-                        ),
-                        // Container(
-                        //   height: 79,
-                        //   width: 50,
-                        //   decoration: BoxDecoration(
-                        //       borderRadius: BorderRadius.circular(25),
-                        //       image: DecorationImage(
-                        //         fit: BoxFit.cover,
-                        //         image: _imageFile != null
-                        //             ? FileImage(_imageFile!)
-                        //             : const AssetImage('assets/teacher.png')
-                        //                 as ImageProvider<Object>,
-                        //       )),
-                        // ),
-                      ]),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 180, top: 15),
-                  child: Text(
-                    "Edit",
-                    style: GoogleFonts.ubuntu(
-                        color: Color(0xFFC24A6B), fontSize: 20),
-                  ),
-                ),
-                // Positioned(
-                //     top: 50,
-                //     left: 75,
-                //     child: IconButton(
-                //       onPressed: () async {
-                //         await getImage();
-                //       },
-                //       icon: Icon(Icons.camera_alt_outlined),
-                //     )),
-                Column(
+          child: Column(
+            children: [
+              SizedBox(height: MediaQuery.of(context).size.height * .12),
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * .12),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Name"),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: TextFormField(
-                        controller: Name,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Empty Name !";
-                          }
-                        },
-                        decoration: InputDecoration(
-                            border: const OutlineInputBorder(),
-                            filled: true,
-                            fillColor: Colors.white),
-                      ),
-                    ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(left: 20.0),
-                    //   child: Row(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: [
-                    //       Text("Address"),
-                    //     ],
-                    //   ),
-                    // ),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 20),
-                    //   child: TextFormField(
-                    //     controller: Address,
-                    //     validator: (value) {
-                    //       if (value!.isEmpty) {
-                    //         return "Empty Address !";
-                    //       }
-                    //     },
-                    //     maxLines: 2,
-                    //     minLines: 2,
-                    //     decoration: InputDecoration(
-                    //         border: const OutlineInputBorder(),
-                    //         filled: true,
-                    //         fillColor: Colors.white),
-                    //   ),
-                    // ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(left: 20.0, top: 10),
-                    //   child: Row(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: [
-                    //       Text("Daycare Name"),
-                    //     ],
-                    //   ),
-                    // ),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 20),
-                    //   child: TextFormField(
-                    //     controller: DaycareName,
-                    //     validator: (value) {
-                    //       if (value!.isEmpty) {
-                    //         return "Empty Daycare Name !";
-                    //       }
-                    //     },
-                    //     decoration: InputDecoration(
-                    //         border: OutlineInputBorder(),
-                    //         filled: true,
-                    //         fillColor: Colors.white),
-                    //   ),
-                    // ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20.0, top: 10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Qualification "),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: TextFormField(
-                        controller: Qualification,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Empty Qualification !";
-                          }
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            filled: true,
-                            fillColor: Colors.white),
-                      ),
-                    ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(left: 20.0),
-                    //   child: Row(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: [
-                    //       Text("Experience"),
-                    //     ],
-                    //   ),
-                    // ),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 20),
-                    //   child: TextFormField(
-                    //     controller: Experience,
-                    //     validator: (value) {
-                    //       if (value!.isEmpty) {
-                    //         return "Empty Experience !";
-                    //       }
-                    //     },
-                    //     maxLines: 2,
-                    //     minLines: 2,
-                    //     decoration: InputDecoration(
-                    //         border: const OutlineInputBorder(),
-                    //         filled: true,
-                    //         fillColor: Colors.white),
-                    //   ),
-                    // ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20.0, top: 10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Phone Number"),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        controller: PhoneNumber,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Empty Phone Number !";
-                          }
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            filled: true,
-                            fillColor: Colors.white),
-                      ),
-                    ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(left: 20.0, top: 10),
-                    //   child: Row(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: [
-                    //       Text("Whatsapp Number"),
-                    //     ],
-                    //   ),
-                    // ),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 20),
-                    //   child: TextFormField(
-                    //     keyboardType: TextInputType.number,
-                    //     controller: whatsappnumber,
-                    //     validator: (value) {
-                    //       if (value!.isEmpty) {
-                    //         return "Empty Whatsapp Number !";
-                    //       }
-                    //     },
-                    //     decoration: InputDecoration(
-                    //         border: OutlineInputBorder(),
-                    //         filled: true,
-                    //         fillColor: Colors.white),
-                    //   ),
-                    // ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 30),
-                      child: ElevatedButton(
-                          onPressed: () {
-                            if (formkey.currentState!.validate()) {
-                              setState(() {
-                                TrEdit();
-                              });
-                            }
-                          },
-                          child: Text(
-                            "Update",
-                            style: GoogleFonts.inriaSerif(
-                                color: Colors.white, fontSize: 20),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                          )),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * .035,
-                    ),
+                    Text("Name"),
                   ],
-                )
-              ],
-            ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: TextFormField(
+                  controller: Name,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Empty Name !";
+                    }
+                  },
+                  decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white),
+                ),
+              ),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 20.0),
+              //   child: Row(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       Text("Address"),
+              //     ],
+              //   ),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 20),
+              //   child: TextFormField(
+              //     controller: Address,
+              //     validator: (value) {
+              //       if (value!.isEmpty) {
+              //         return "Empty Address !";
+              //       }
+              //     },
+              //     maxLines: 2,
+              //     minLines: 2,
+              //     decoration: InputDecoration(
+              //         border: const OutlineInputBorder(),
+              //         filled: true,
+              //         fillColor: Colors.white),
+              //   ),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 20.0, top: 10),
+              //   child: Row(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       Text("Daycare Name"),
+              //     ],
+              //   ),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 20),
+              //   child: TextFormField(
+              //     controller: DaycareName,
+              //     validator: (value) {
+              //       if (value!.isEmpty) {
+              //         return "Empty Daycare Name !";
+              //       }
+              //     },
+              //     decoration: InputDecoration(
+              //         border: OutlineInputBorder(),
+              //         filled: true,
+              //         fillColor: Colors.white),
+              //   ),
+              // ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0, top: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Qualification "),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: TextFormField(
+                  controller: Qualification,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Empty Qualification !";
+                    }
+                  },
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white),
+                ),
+              ),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 20.0),
+              //   child: Row(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       Text("Experience"),
+              //     ],
+              //   ),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 20),
+              //   child: TextFormField(
+              //     controller: Experience,
+              //     validator: (value) {
+              //       if (value!.isEmpty) {
+              //         return "Empty Experience !";
+              //       }
+              //     },
+              //     maxLines: 2,
+              //     minLines: 2,
+              //     decoration: InputDecoration(
+              //         border: const OutlineInputBorder(),
+              //         filled: true,
+              //         fillColor: Colors.white),
+              //   ),
+              // ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0, top: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Phone Number"),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: PhoneNumber,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return "Empty Phone Number !";
+                    }
+                  },
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      filled: true,
+                      fillColor: Colors.white),
+                ),
+              ),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 20.0, top: 10),
+              //   child: Row(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       Text("Whatsapp Number"),
+              //     ],
+              //   ),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 20),
+              //   child: TextFormField(
+              //     keyboardType: TextInputType.number,
+              //     controller: whatsappnumber,
+              //     validator: (value) {
+              //       if (value!.isEmpty) {
+              //         return "Empty Whatsapp Number !";
+              //       }
+              //     },
+              //     decoration: InputDecoration(
+              //         border: OutlineInputBorder(),
+              //         filled: true,
+              //         fillColor: Colors.white),
+              //   ),
+              // ),
+              Padding(
+                padding: const EdgeInsets.only(top: 30),
+                child: ElevatedButton(
+                    onPressed: () {
+                      if (formkey.currentState!.validate()) {
+                        setState(() {
+                          TrEdit();
+                        });
+                      }
+                    },
+                    child: Text(
+                      "Update",
+                      style: GoogleFonts.inriaSerif(
+                          color: Colors.white, fontSize: 20),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green.shade900,
+                    )),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * .035,
+              ),
+            ],
           ),
         ),
       ),

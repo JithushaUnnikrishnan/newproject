@@ -57,7 +57,7 @@ class _DaycareProfileState extends State<DaycareProfile> {
         return Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            backgroundColor: Color.fromRGBO(117, 10, 100, 1),
+            backgroundColor: Colors.green.shade200,
             toolbarHeight: 122,
             elevation: 6,
             shadowColor: Colors.grey,
@@ -69,7 +69,7 @@ class _DaycareProfileState extends State<DaycareProfile> {
                 "Profile",
                 style: GoogleFonts.inriaSerif(
                   fontSize: 38,
-                  color: Colors.white,
+
                 ),
               ),
             ),
@@ -185,7 +185,7 @@ class _DaycareProfileState extends State<DaycareProfile> {
                   Padding(
                       padding: const EdgeInsets.only(right: 30, top: 20),
                       child: InkWell(onTap: (){
-                        Navigator.push(
+                        Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => LogoPage()));

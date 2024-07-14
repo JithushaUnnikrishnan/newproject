@@ -5,7 +5,6 @@ import 'package:tiny/babysitters/babysitters_signup.dart';
 import 'package:tiny/babysitters/bs_bottombutton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,23 +20,21 @@ class _BabysitterLoginState extends State<BabysitterLogin> {
   var email = TextEditingController();
   var password = TextEditingController();
   String id = "";
-  String Daycarename = "";
-
+  String Daycare_id = "";
 
   void BabyLog() async {
     final user = await FirebaseFirestore.instance
-        .collection('Daycare AddStaff')
+        .collection('DaycareAddStaff')
         .where('Email', isEqualTo: email.text)
-        .where('password', isEqualTo: password.text)
+        .where('Password', isEqualTo: password.text)
         .get();
     if (user.docs.isNotEmpty) {
       id = user.docs[0].id;
-      Daycarename = user.docs[0]["Daycare Name"];
-
+      Daycare_id = user.docs[0]["DaycareId"];
 
       SharedPreferences data = await SharedPreferences.getInstance();
       data.setString('id', id);
-      data.setString("Daycarename", Daycarename);
+      data.setString("Daycareid", Daycare_id);
       Navigator.push(context, MaterialPageRoute(
         builder: (context) {
           return BottomButton();
@@ -46,9 +43,9 @@ class _BabysitterLoginState extends State<BabysitterLogin> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
-        "Email and password invalid",
-        style: TextStyle(color: Colors.red),
-      )));
+            "Email and password invalid",
+            style: TextStyle(color: Colors.red),
+          )));
     }
   }
 
@@ -57,140 +54,119 @@ class _BabysitterLoginState extends State<BabysitterLogin> {
     return Form(
       key: formkey,
       child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 100, 0, 0),
-          child: SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(),
-            child: Container(
-              height: MediaQuery.of(context).size.height * .7,
-              width: MediaQuery.of(context).size.width * .9,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(50)),
-                image: DecorationImage(
-                  image: AssetImage('assets/output.png'),
-                  fit: BoxFit.fill,
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.green.shade100, Colors.green.shade400],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Welcome, Babysitter!",
+                      style: GoogleFonts.lato(
+                        fontSize: 40,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Container(
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.9),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 10,
+                            spreadRadius: 5,
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Login",
+                            style: GoogleFonts.lato(
+                              fontSize: 30,
+                              color: Colors.green.shade900,
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          TextFormField(
+                            keyboardType: TextInputType.emailAddress,
+                            controller: email,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Empty Email !";
+                              }
+                            },
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              hintText: "Email",
+                              filled: true,
+                              fillColor: Colors.white,
+                              prefixIcon: Icon(Icons.email, color: Colors.green),
+                              labelStyle: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          TextFormField(
+                            obscureText: true,
+                            controller: password,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Empty Password !";
+                              }
+                            },
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              hintText: "Password",
+                              filled: true,
+                              fillColor: Colors.white,
+                              prefixIcon: Icon(Icons.lock, color: Colors.green),
+                              labelStyle: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                          SizedBox(height: 40),
+                          ElevatedButton(
+                            onPressed: () {
+                              if (formkey.currentState!.validate()) {
+                                BabyLog();
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white, backgroundColor: Colors.green.shade900,
+                              padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: Text(
+                              "Login",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+
+
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        "Login",
-                        style: GoogleFonts.rubikGlitch(
-                          fontSize: 50,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      controller: email,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Empty Email !";
-                        }
-                      },
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        hintText: "Email",
-                        filled: true,
-                        fillColor: Colors.grey[50],
-                        labelStyle: const TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      obscureText: true,
-                      controller: password,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "Empty Password !";
-                        }
-                      },
-                      decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          hintText: "Password",
-                          filled: true,
-                          fillColor: Colors.grey[50],
-                          labelStyle: const TextStyle(color: Colors.grey)),
-                    ),
-                  ),
-
-                  // Row(
-                  //   children: [
-                  //     Expanded(
-                  //         child: Align(
-                  //       alignment: Alignment.bottomRight,
-                  //       child: InkWell(
-                  //         onTap: () {
-                  //           Navigator.push(
-                  //               context,
-                  //               MaterialPageRoute(
-                  //                   builder: (context) => BabysForgot()));
-                  //         },
-                  //         child: Text(
-                  //           "Forgot password?",
-                  //           style: TextStyle(),
-                  //         ),
-                  //       ),
-                  //     )),
-                  //   ],
-                  // ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 50),
-                    child: ElevatedButton(
-                        onPressed: () {
-                          if (formkey.currentState!.validate()) {
-                            BabyLog();
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white),
-                        child: const Text(
-                          "Login",
-                        )),
-                  ),
-
-                  // Padding(
-                  //   padding: const EdgeInsets.only(top: 170),
-                  //   child: TextButton(
-                  //     onPressed: () {
-                  //       Navigator.push(
-                  //           context,
-                  //           MaterialPageRoute(
-                  //               builder: (context) => const BabysitterSignup()));
-                  //     },
-                  //     style: ButtonStyle(
-                  //       overlayColor:
-                  //           MaterialStateProperty.all(Colors.transparent),
-                  //       mouseCursor:
-                  //           MaterialStateProperty.all(SystemMouseCursors.basic),
-                  //     ),
-                  //     child: const Text(
-                  //       "Create account?",
-                  //       style: TextStyle(
-                  //           color: Colors.black,
-                  //           fontWeight: FontWeight.bold,
-                  //           fontSize: 20),
-                  //     ),
-                  //   ),
-                  // )
-                ],
               ),
             ),
           ),

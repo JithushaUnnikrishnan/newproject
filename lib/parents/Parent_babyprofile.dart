@@ -63,7 +63,7 @@ class _ParentBabyprofileState extends State<ParentBabyprofile> {
                   child: Container(
                     width: 367,
                     height: 200,
-                    decoration: BoxDecoration(
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),
                       boxShadow: [
                         BoxShadow(
                             offset: Offset(0, 3),
@@ -91,12 +91,12 @@ class _ParentBabyprofileState extends State<ParentBabyprofile> {
                                           image:
                                               NetworkImage(mychild!["path"])))),
                               Text(mychild!["Child name"],
-                                  style: GoogleFonts.inriaSerif(
+                                  style: GoogleFonts.poppins(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold)),
                               Text(mychild!["Date of birth"],
                                   style: GoogleFonts.inriaSerif(
-                                      fontSize: 15,
+                                      fontSize: 15,color: Colors.grey,
                                       fontWeight: FontWeight.bold)),
                             ],
                           ),

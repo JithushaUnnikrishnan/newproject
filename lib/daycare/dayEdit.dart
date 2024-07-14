@@ -75,7 +75,7 @@ class _DaycareEditState extends State<DaycareEdit> {
       child: Scaffold(
         appBar: AppBar(
 
-          backgroundColor: Color.fromRGBO(117, 10, 100, 1),
+          backgroundColor: Colors.green.shade200,
           toolbarHeight: 122,
           elevation: 6,
           shadowColor: Colors.grey,
@@ -149,7 +149,7 @@ class _DaycareEditState extends State<DaycareEdit> {
                     width: MediaQuery.of(context).size.width * .25,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.blue,
+                        color: Colors.green.shade900,
                         boxShadow: [
                           BoxShadow(
                               offset: Offset(0, 2),

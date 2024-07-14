@@ -21,16 +21,16 @@ class _SelectCategoryregState extends State<SelectCategoryreg> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFE2EBF0),
+      backgroundColor: Colors.black45,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        // leading: IconButton(
+        //   icon: Icon(Icons.arrow_back, color: Colors.black),
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        // ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -43,7 +43,7 @@ class _SelectCategoryregState extends State<SelectCategoryreg> {
               style: GoogleFonts.poppins(
                 fontWeight: FontWeight.w500,
                 fontSize: 25,
-                color: Colors.black87,
+                color: Colors.white,
               ),
               textAlign: TextAlign.center,
             ),
@@ -54,28 +54,28 @@ class _SelectCategoryregState extends State<SelectCategoryreg> {
                 mainAxisSpacing: 20,
                 crossAxisSpacing: 20,
                 children: [
-                  buildCategoryCard("Parent", Color(0xFF6ED2F8), ParentLogin(),
-                      Icons.person),
+                  buildCategoryCard(
+                      "Parent", Color(0xFF6ED2F8), ParentLogin(), Icons.person),
                   buildCategoryCard("Daycare", Color(0xFFFFA726),
                       DaycareLogin(), Icons.child_care),
-                  buildCategoryCard("Teacher",Color(0xFF7FFFD4), BabysitterLogin(),
-                      Icons.school),
+                  buildCategoryCard("Teacher", Color(0xFF7FFFD4),
+                      BabysitterLogin(), Icons.school),
                   buildCategoryCard("Doctor", Color(0xFFD8BFD8), DoctorLogin(),
                       Icons.medical_services),
                 ],
               ),
-
             ),
             Align(
               alignment: Alignment.centerRight,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AdminLogin()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AdminLogin()));
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   decoration: BoxDecoration(
-                    color:Color(0xFF4682B4),
+                    color: Color(0xFF4682B4),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
                       bottomLeft: Radius.circular(30),
